@@ -17,7 +17,7 @@ public class Options
         $"Mandatory Take -> {MandatoryTake}\n" +
         $"Queens Have OP Moves -> {QueensHaveOpMoves}\n" +
         $"Board Width -> {BoardWidth}\n" +
-        $"Board Height -> {BoardHeight}\n";
+        $"Board Height -> {BoardHeight}";
     
 
     public override bool Equals(object? obj)

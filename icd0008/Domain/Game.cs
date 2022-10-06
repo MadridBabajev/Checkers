@@ -9,15 +9,19 @@ public class Game
     public Options? GameOptions { get; set; }
     public EGameType GameType { get; set; }
     public List<CheckersPiece>? BoardState { get; set; }
+    public List<string?>? HeightSpecifiers { get; set; }
+    public List<string?>? WidthSpecifiers { get; set; }
+    public bool? WhitesTurn { get; set; }
     public string? SavedDate { get; set; }
-    
+
+
     public override string ToString()
     {
-        return $"{GameId}\n" +
+        return $"Game id -> {GameId}\n" +
                $"{GameOptions}\n" +
-               $"{GameType}\n" +
-               $"{BoardState}" +
-               $"{SavedDate}\n";
+               $"Game Type -> {GameType}\n" +
+               $"Game Date -> {SavedDate}\n" +
+               $"Whites Turn -> {WhitesTurn}\n";
     }
     private static void Main() {}
 }

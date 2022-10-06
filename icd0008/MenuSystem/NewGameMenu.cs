@@ -1,4 +1,3 @@
-using GameOptions;
 using Games;
 
 namespace MenuSystem;
@@ -40,9 +39,9 @@ public class NewGameMenu: IMenu
         }
     }
 
-    void IMenu.RedirectTo(string userInput)
+    void IMenu.RedirectTo(string? userInput)
     {
-        var game = NewGameMenuItems[userInput];
+        var game = NewGameMenuItems[userInput!];
         game.GetGame()?.StartGame();
     }
 

@@ -14,6 +14,7 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\GameOptions\GameOptions.csproj" />
       <ProjectReference Include="..\GameUI\GameUI.csproj" />
+      <ProjectReference Include="..\GlobalConstants\GlobalConstants.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,12 +5,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>CheckersGame</RootNamespace>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\GlobalConstants\GlobalConstants.csproj" />
-      <ProjectReference Include="..\MenuSystem\MenuSystem.csproj" />
-    </ItemGroup>
 
 </Project>

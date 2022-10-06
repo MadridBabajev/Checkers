@@ -10,7 +10,7 @@ internal static class CheckersGame
 {
     private static readonly Options DefaultOptions = new();
     // Absolute path on my machine, the relative path doesn't seem to work for me..
-    private const string OptionsPath = @"C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0008-2022f\icd0008\GameOptions\CurrentOptions.json";
+    private const string OptionsPath = GlobalConstants.GlobalConstants.OptionsFileLocation;
 
     public static void Main()
     {

@@ -1,13 +1,12 @@
-using System.Net;
+
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using GameOptions;
 
 namespace MenuSystem;
 
 public class OptionsMenu: IMenu
 {
-    private const string OptionsPath = @"C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0008-2022f\icd0008\GameOptions\CurrentOptions.json";
+    private const string OptionsPath = GlobalConstants.GlobalConstants.OptionsFileLocation;
     private Options? _currentOptions;
 
     public void InitialiseMenu()

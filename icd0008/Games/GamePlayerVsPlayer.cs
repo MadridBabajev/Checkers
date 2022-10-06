@@ -10,7 +10,7 @@ namespace Games;
 public class GamePlayerVsPlayer: IGame
 {
     
-    private const string OptionsPath = @"C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0008-2022f\icd0008\GameOptions\CurrentOptions.json";
+    private const string OptionsPath = GlobalConstants.GlobalConstants.OptionsFileLocation;
     private Options? _gamesOptions;
     private List<string?>? _heightSpecifiers;
     private List<string?>? _widthSpecifiers;
@@ -19,7 +19,7 @@ public class GamePlayerVsPlayer: IGame
     private CheckersPiece? _currentlyChosenPiece;
     private bool GameOver { get; set; }
 
-    private void GamePlayerVsPlayerFactory()
+    private void GamePlayerVsPlayerFactoryNewGameStarted()
     {
         _gamesOptions = GetOptions();
         var savedDataFromUi = GameUI.GameUI.BuildInitialBoard(_gamesOptions);
@@ -27,20 +27,43 @@ public class GamePlayerVsPlayer: IGame
         _widthSpecifiers = savedDataFromUi.WidthSpecifiers;
         _checkersPieces = savedDataFromUi.CheckersPieces;
         _whitesTurn = _gamesOptions?.WhitesFirst ?? true;
+        Console.WriteLine(_heightSpecifiers);
+        Console.WriteLine(_widthSpecifiers);
+    }
+
+    private void GamePlayerVsPlayerFactoryNewGameLoaded(Game game)
+    {
+        _gamesOptions = game.GameOptions;
+        _heightSpecifiers = game.HeightSpecifiers;
+        _widthSpecifiers = game.WidthSpecifiers;
+        _checkersPieces = game.BoardState;
+        _whitesTurn = game.WhitesTurn ?? true;
     }
     public void StartGame()
     {
         Console.WriteLine("== Starting new game... ==");
-        GamePlayerVsPlayerFactory();
+        GamePlayerVsPlayerFactoryNewGameStarted();
 
         Console.WriteLine("== New Game has started with the following rules: ==");
         Console.Write(_gamesOptions);
         ((IGame)this).InGameMenu();
         ProceedToSaveGame();
     }
+    
+    public void LoadGame(Game game)
+    {
+        GamePlayerVsPlayerFactoryNewGameLoaded(game);
+        Console.WriteLine("== Loading the game... ==\n");
+        RefreshBoard();
+        Console.WriteLine("== Game was loaded with the following rules: ==");
+        Console.Write(_gamesOptions);
+        ((IGame)this).InGameMenu();
+        ProceedToSaveGame();
+    }
+    
     void IGame.InGameMenu()
     {
-        Console.WriteLine("Press B to go back or R to refresh the board!");
+        Console.WriteLine("\nPress B to go back or R to refresh the board!");
         do
         {
             CheckIfTheGameIsOver();
@@ -216,6 +239,7 @@ public class GamePlayerVsPlayer: IGame
     {
         GameUI.GameUI.UpdateBoardState(_checkersPieces, _gamesOptions);
     }
+
     public Options? GetOptions()
     {
         var jsonDataOptionsTemp = File.ReadAllText(OptionsPath);
@@ -225,7 +249,7 @@ public class GamePlayerVsPlayer: IGame
     {
         string id = EGameType.Pvp + "_" + DateTime.Now.ToString(CultureInfo.InvariantCulture);
         GameRepositoryFileSystem.SaveGame(
-            id, _gamesOptions, EGameType.Pvp, _checkersPieces, DateTime.Now);
+            id, _gamesOptions, EGameType.Pvp, _checkersPieces, _heightSpecifiers, _widthSpecifiers, _whitesTurn, DateTime.Now);
     }
     private static void Main() {}
 }

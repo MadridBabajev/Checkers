@@ -15,28 +15,28 @@ public class GameRepositoryFileSystem : IGameRepository
 
     public static List<Game> GetAllGamesList()
     {
-        var retList = new List<Game>();
-        foreach (var fileName in Directory.GetFileSystemEntries(DirectoryLocation, "*." + FileExtension))
-        {
-            retList.Add(GetGameById(fileName));
-        }
-        return retList;
+        return Directory.GetFileSystemEntries
+            (DirectoryLocation, "*." + FileExtension)
+            .Select(fileName => GetGameById(fileName)).ToList();
     }
 
     public static Game GetGameById(string id)
     {
-        var fileContent = File.ReadAllText(GetFileName(id));
+        var fileContent = File.ReadAllText(id);
         var game = JsonSerializer.Deserialize<Game>(fileContent);
         if (game == null) throw new NullReferenceException($"Could not deserialize: {fileContent}");
         return game;
     }
 
-    public static void SaveGame(string id, Options? options, EGameType gameType, List<CheckersPiece>? boardState, DateTime savedDate)
+    public static void SaveGame(string id, Options? options,
+        EGameType gameType, List<CheckersPiece>? boardState, List<string?>? heightSpecifiers,
+        List<string?>? widthSpecifiers, bool whitesTurn, DateTime savedDate)
     {
         if (options != null && boardState != null)
         {
             if (!Directory.Exists(DirectoryLocation)) Directory.CreateDirectory(DirectoryLocation);
-            SetCurrentGameProperties(id, options, gameType, boardState, savedDate);
+            SetCurrentGameProperties(id, options, gameType,
+                boardState, heightSpecifiers, widthSpecifiers, whitesTurn, savedDate);
             var jsonString = JsonSerializer.Serialize(LastSavedGame);
             
             File.WriteAllText(GetFileName(id), jsonString);
@@ -55,13 +55,18 @@ public class GameRepositoryFileSystem : IGameRepository
                HttpUtility.UrlEncode(id, System.Text.Encoding.UTF8)
                + "." + FileExtension;
     }
-    private static void SetCurrentGameProperties(string id, Options options, EGameType gameType, List<CheckersPiece>? boardState, DateTime savedDate)
+    private static void SetCurrentGameProperties(string id, Options options, EGameType gameType,
+        List<CheckersPiece>? boardState,List<string?>? heightSpecifiers,
+        List<string?>? widthSpecifiers, bool whitesTurn, DateTime savedDate)
     {
         LastSavedGame.GameId = id;
         LastSavedGame.GameOptions = options;
         LastSavedGame.GameType = gameType;
         LastSavedGame.BoardState = boardState;
-            LastSavedGame.SavedDate = savedDate.ToString(CultureInfo.CurrentCulture);
+        LastSavedGame.HeightSpecifiers = heightSpecifiers;
+        LastSavedGame.WidthSpecifiers = widthSpecifiers;
+        LastSavedGame.WhitesTurn = whitesTurn;
+        LastSavedGame.SavedDate = savedDate.ToString(CultureInfo.CurrentCulture);
     }
     
     private static void Main() {}

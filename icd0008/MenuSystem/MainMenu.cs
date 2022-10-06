@@ -1,4 +1,3 @@
-using GameOptions;
 
 namespace MenuSystem;
 
@@ -45,7 +44,7 @@ public class MainMenu : IMenu
         return retString;
     }
 
-    void IMenu.RedirectTo(string userInput)
+    void IMenu.RedirectTo(string? userInput)
     {
         switch (userInput)
         {
@@ -65,6 +64,5 @@ public class MainMenu : IMenu
     }
 
     private static void Main() {}
-    public void InitialiseMenu(Options options) {}
-
+    
 }
