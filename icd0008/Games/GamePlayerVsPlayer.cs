@@ -27,8 +27,6 @@ public class GamePlayerVsPlayer: IGame
         _widthSpecifiers = savedDataFromUi.WidthSpecifiers;
         _checkersPieces = savedDataFromUi.CheckersPieces;
         _whitesTurn = _gamesOptions?.WhitesFirst ?? true;
-        Console.WriteLine(_heightSpecifiers);
-        Console.WriteLine(_widthSpecifiers);
     }
 
     private void GamePlayerVsPlayerFactoryNewGameLoaded(Game game)

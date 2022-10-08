@@ -13,15 +13,10 @@ public class Game
     public List<string?>? WidthSpecifiers { get; set; }
     public bool? WhitesTurn { get; set; }
     public string? SavedDate { get; set; }
-
-
+    
     public override string ToString()
     {
-        return $"Game id -> {GameId}\n" +
-               $"{GameOptions}\n" +
-               $"Game Type -> {GameType}\n" +
-               $"Game Date -> {SavedDate}\n" +
-               $"Whites Turn -> {WhitesTurn}\n";
+        return $"Game id -> {GameId}\n";
     }
     private static void Main() {}
 }

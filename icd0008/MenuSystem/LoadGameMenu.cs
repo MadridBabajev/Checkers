@@ -6,36 +6,31 @@ namespace MenuSystem;
 
 public class LoadGameMenu: IMenu
 {
-    private HashSet<string> _validNums = new();
-    private Dictionary<string, Game> _savedGames = new();
+    private List<string> _loadGameMenuItems = new();
+    private Dictionary<int, Game> _savedGames = new();
     public void InitialiseMenu()
     {
         Console.WriteLine("\n== Saved Games ==");
-        Console.WriteLine(((IMenu)this).InitialMenu());
-        while (true)
+        GetGamesFromRepository();
+        bool userWantsToExist = false;
+        int lastItemValue = _loadGameMenuItems.Count - 1;
+        
+        while (!userWantsToExist)
         {
-            Console.WriteLine("Pick a game You would like to load![e.g 1]");
-            Console.WriteLine("Press B to go back");
-            Console.Write("Your choice: "); 
-            var userInput = Console.ReadLine()?.ToUpper().Trim();
-            if (userInput == "B") break;
-            if (!_validNums.Contains(userInput!)) {Console.WriteLine("No such game number found"); continue;}
-
-            ((IMenu)this).RedirectTo(userInput);
-        }
-    }
-    void IMenu.RedirectTo(string? userInput)
-    {
-        foreach (KeyValuePair<string, Game> entry in _savedGames)
-        {
-            if (userInput == entry.Key)
+            int userChoice = ConsoleHelper.MultipleChoice(true, _loadGameMenuItems.ToArray());
+            if (userChoice == lastItemValue) return;
+            switch (userChoice)
             {
-                LoadSelectedGame(entry.Value);
+                case -1:
+                    Console.WriteLine("\nExiting The game..");
+                    userWantsToExist = true;
+                    break;
+                default:
+                    LoadSelectedGame(_savedGames[userChoice]);
+                    break;
             }
         }
-        Console.WriteLine("Failed to find the game!");
     }
-
     private void LoadSelectedGame(Game game)
     {
         switch (game.GameType)
@@ -54,24 +49,17 @@ public class LoadGameMenu: IMenu
                 break;
         }
     }
-
-    string IMenu.InitialMenu()
+    private void GetGamesFromRepository()
     {
-        Console.WriteLine("===============================");
-        string printString = "";
-        short i = 1;
-        
+        short i = 0;
+        _savedGames = new();
+        _loadGameMenuItems = new();
         foreach (var game in GameRepositoryFileSystem.GetAllGamesList())
         {
-            _validNums.Add(i.ToString());
-            _savedGames.Add(i.ToString(), game);
-            printString += "===============================\n";
-            printString += $"Game number -> {i}\n{game}";
-            printString += "===============================\n";
-            i++;
+             _savedGames.Add(i++, game);
+             _loadGameMenuItems.Add(game.ToString());
         }
-        printString += "===============================";
-        return printString;
+        _loadGameMenuItems.Add("Back");
     }
 
 }

@@ -5,15 +5,18 @@ using GameParts;
 
 namespace GameUI;
 
+// ReSharper disable once InconsistentNaming
 public static class GameUI
 {
     private static readonly List<CheckersPiece> CheckersPieces = new();
+    // private static bool _spacesAfterNum;
     public static SavedDataFromUI BuildInitialBoard(Options? options)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        List<string> widthSpecifiers = DrawUpperRow(options?.BoardWidth);
+        List<string> widthSpecifiers = DrawUpperRow(options?.BoardWidth, options?.BoardHeight);
         List<string> heightSpecifiers = new();
         bool currentWhite = true;
+        // _spacesAfterNum = options?.BoardHeight / 10 >= 1;
         short lastI = 0;
         for (short i = 0; i < options?.BoardHeight; i++)
         {
@@ -44,7 +47,9 @@ public static class GameUI
     {
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.White;
-        Console.Write($"\n {options.BoardHeight - i} ");
+        Console.Write($"\n {options.BoardHeight - i}" +
+                      // $"{((options.BoardHeight - i) / 10 >= 1 ? " " : "  ")}" +
+                      $"{(i < 17 ? "  " : "   ")}");
     }
     private static void HandleBlackTiles(short y, short x, Options? options)
     {
@@ -89,10 +94,10 @@ public static class GameUI
         return (ConsoleColor)index;
     }
 
-    private static List<string> DrawUpperRow(short? boardWidth)
+    private static List<string> DrawUpperRow(short? boardWidth, short? boardHeight)
     {
         List<string> widthSpecifiers = new();
-        Console.Write("   ");
+        Console.Write($"   {(boardHeight > 10 ? "  " : " ")}");
         for (short i = 0; i < boardWidth; i++) 
         {
             Console.Write($" {Convert.ToChar(65 + i)} ");
@@ -104,7 +109,7 @@ public static class GameUI
     public static void UpdateBoardState(List<CheckersPiece>? checkersPieces, Options? options)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-        DrawUpperRow(options?.BoardWidth);
+        DrawUpperRow(options?.BoardWidth, options?.BoardHeight);
         bool currentWhite = true;
         short lastI = 0;
         for (short i = 0; i < options?.BoardHeight; i++) {

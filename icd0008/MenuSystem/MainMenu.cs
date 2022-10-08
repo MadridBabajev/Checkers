@@ -3,66 +3,38 @@ namespace MenuSystem;
 
 public class MainMenu : IMenu
 {
-    private static readonly Dictionary<string, MenuItem> MainMenuItems = new()
+    private readonly string[] _mainMenuItems = { "New Game", "Load Game", "DeleteGame", "Options", "Exit" };
+
+    private static readonly Dictionary<int, IMenu> MainMenuItemsDictionary = new()
     {
-        {"N", new MenuItem("New Game", "N", new NewGameMenu())},
-        {"L", new MenuItem("Load Game", "L", new LoadGameMenu())},
-        {"O", new MenuItem("Options", "O", new OptionsMenu())},
-        {"E", new MenuItem("Exit", "E", null)}
+        { 0, new NewGameMenu() },
+        { 1, new LoadGameMenu() },
+        { 2, new DeleteGameMenu() },
+        { 3, new OptionsMenu() }
     };
+
     public void InitialiseMenu()
     {
-        Console.WriteLine("== Welcome to Checkers game! ==");
-        // bool userExited = false;
-        while (true)
+        bool userWantsToExist = false;
+        while (!userWantsToExist)
         {
-            // Console.WriteLine("[Currently in the main menu..]");
-            Console.WriteLine(((IMenu)this).InitialMenu());
-            Console.Write("Your choice: ");
-            var userInput = Console.ReadLine()?.ToUpper().Trim();
-            switch (userInput)
+            int userChoice = ConsoleHelper.MultipleChoice(true, _mainMenuItems);
+            switch (userChoice)
             {
-                case "N":
-                case "L":
-                case "O":
-                    ((IMenu)this).RedirectTo(userInput);
+                case -1:
+                case 4 :    
+                    Console.WriteLine("\nExiting The game..");
+                    userWantsToExist = true;
                     break;
-                case "E":
-                    return;
-                default:
-                    Console.Write("Invalid input! Choose one of those [N, L, O, E]\n");
-                    continue;
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    MainMenuItemsDictionary[userChoice].InitialiseMenu();
+                    break;
             }
         }
     }
-
-    string IMenu.InitialMenu()
-    {
-        var retString = MainMenuItems.Values.Aggregate("==================\n",
-            (current, menu) => current + menu + "\n");
-        retString += "==================";
-        return retString;
-    }
-
-    void IMenu.RedirectTo(string? userInput)
-    {
-        switch (userInput)
-        {
-            case "N":
-                var newGameMenu = MainMenuItems["N"];
-                newGameMenu.GetMenu()?.InitialiseMenu();
-                break;
-            case "L":
-                var loadGameMenu = MainMenuItems["L"];
-                loadGameMenu.GetMenu()?.InitialiseMenu();
-                break;
-            case "O":
-                var optionsMenu = MainMenuItems["O"];
-                optionsMenu.GetMenu()?.InitialiseMenu();
-                break;
-        }
-    }
-
     private static void Main() {}
     
 }
