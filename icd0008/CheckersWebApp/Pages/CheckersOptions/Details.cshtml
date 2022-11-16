@@ -1,0 +1,100 @@
+@page
+@model CheckersWebApp.Pages.CheckersOptions.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Checkers options ⚙</h5>
+            </div>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label asp-for="CheckersOptions.Name" class="control-label">Options Name: @Model.CheckersOptions.Name</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label asp-for="CheckersOptions.CreatedAt" class="control-label">Creation Date: @Model.CheckersOptions.CreatedAt</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group ">
+                        @{
+                            if (Model.CheckersOptions.WhitesFirst)
+                            {
+                                <label asp-for="CheckersOptions.WhitesFirst" class="control-label">Whites First: <span class="text-success">Yes</span></label>
+                            }
+                            else
+                            {
+                                <label asp-for="CheckersOptions.WhitesFirst" class="control-label">Whites First: <span class="text-danger">No</span></label>
+                            }
+                        }
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        @{
+                            if (Model.CheckersOptions.MandatoryTake)
+                            {
+                                <label asp-for="CheckersOptions.MandatoryTake" class="control-label">Mandatory Take: <span class="text-success">Yes</span></label>
+                            }
+                            else
+                            {
+                                <label asp-for="CheckersOptions.MandatoryTake" class="control-label">Mandatory Take: <span class="text-danger">No</span></label>
+                            }
+                        }
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        @{
+                            if (Model.CheckersOptions.QueensHaveOpMoves)
+                            {
+                                <label asp-for="CheckersOptions.QueensHaveOpMoves" class="control-label">OP Queens: <span class="text-success">Yes</span></label>
+                            }
+                            else
+                            {
+                                <label asp-for="CheckersOptions.QueensHaveOpMoves" class="control-label">OP Queens: <span class="text-danger">No</span></label>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersOptions.BoardWidth" class="control-label">Board Width: @Model.CheckersOptions.BoardWidth</label>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersOptions.BoardWidth" class="control-label">Board Height: @Model.CheckersOptions.BoardHeight</label>
+                    </div>
+                </div>
+
+                <div class="card-footer text-end">
+                    <div class="text-end mt-2">
+                        <a asp-page="./Index" class="btn btn-dark">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

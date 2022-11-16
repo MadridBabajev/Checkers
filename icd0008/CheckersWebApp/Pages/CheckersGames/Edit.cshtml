@@ -1,0 +1,93 @@
+@page
+@model CheckersWebApp.Pages.CheckersGames.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit checkers game</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Game 🏁</h5>
+            </div>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="hidden" asp-for="CheckersGame.Id" />
+                        <div class="form-group">
+                            <label asp-for="CheckersGame.GameType" class="control-label">Game Type: @Model.CheckersGame.GameType</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label asp-for="CheckersGame.StartedAt" class="control-label">Started at: @Model.CheckersGame.StartedAt</label>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        @{
+                            if (Model.CheckIfFinishedState())
+                            {
+                                <label asp-for="CheckersGame.GameOverAt" class="control-label">State: <span class="text-danger">@Model.CheckersGame.GameOverAt</span></label>
+                            } else {
+                                <label asp-for="CheckersGame.GameOverAt" class="control-label">State: <span class="text-success">Unfinished</span></label>
+                            }
+                        }
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.CheckersOptionsId" class="control-label">Options</label>
+                        <select asp-for="CheckersGame.CheckersOptionsId" aria-label="Disabled select example" disabled class="form-control">
+                            <option selected="selected">
+                                @Model.GetGameOptionsName();
+                            </option>
+                        </select>
+                        
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.GamePlayer1Id" class="control-label">Player 1</label>
+                        <select asp-for="CheckersGame.GamePlayer1Id" class="form-control" asp-items="ViewBag.GamePlayer1Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer1Id" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label asp-for="CheckersGame.GamePlayer2Id" class="control-label">Player 2</label>
+                        <select asp-for="CheckersGame.GamePlayer2Id" class="form-control" asp-items="ViewBag.GamePlayer2Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer2Id" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer text-end">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                    </div>
+                    
+                    <div class="text-end mt-2">
+                        <a asp-page="./Index" class="btn btn-dark">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

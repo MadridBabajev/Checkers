@@ -1,0 +1,34 @@
+-- auto-generated definition
+-- No source text available
+
+
+-- ========= INITIATE EXAMPLES =========
+-- INSERT INTO Players (PlayerName, PlayerType) VALUES ('TEST1', 0);
+-- INSERT INTO Players (PlayerName, PlayerType) VALUES ('TEST2', 1);
+-- 
+-- INSERT INTO CheckersOptions (Name, CreatedAt,
+--                              WhitesFirst, MandatoryTake,
+--                              QueensHaveOpMoves, BoardWidth,
+--                              BoardHeight) 
+--                         VALUES ('TEST_OPTION_1', DATE('now'),
+--                                 1, 1, 0, 8, 8);
+-- 
+-- INSERT INTO CheckersGames (StartedAt,
+--                            GameType,
+--                            FK_Game_Player1,
+--                            FK_Game_Player2,
+--                            CheckersOptionsId)
+-- VALUES (DATE(), 0, 1, 2, 1);
+-- 
+-- INSERT INTO GameStates (CreatedAt, SerializedGameState, CheckersGameId) 
+--                         VALUES (DATE('now'), 'TEST_STATE_1', 1);
+-- INSERT INTO GameStates (CreatedAt, SerializedGameState, CheckersGameId)
+--                         VALUES (DATE('now'), 'TEST_STATE_2', 1)
+
+
+-- ========= QUERIES =========
+
+-- SELECT * FROM CheckersOptions;
+-- SELECT * FROM CheckersGames;
+-- SELECT * FROM Players;
+-- SELECT * FROM GameStates;

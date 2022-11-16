@@ -1,0 +1,54 @@
+@page
+@model CheckersWebApp.Pages.Players.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit player</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Player: @Model.Player.PlayerName 🎮</h5>
+            </div>
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="Player.PlayerName" class="control-label">Name</label>
+                        <input asp-for="Player.PlayerName" class="form-control mt-1" />
+                        <span asp-validation-for="Player.PlayerName" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label asp-for="Player.PlayerType" class="control-label">Type</label>
+                        <select asp-for="Player.PlayerType" aria-label="Disabled select example" disabled class="form-control mt-1">
+                            <option selected="selected">@Model.Player.PlayerType</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-end">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-success" />
+                    </div>
+                    
+                    <div class="text-end mt-2">
+                        <a asp-page="./Index" class="btn btn-dark">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

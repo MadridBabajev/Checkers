@@ -1,0 +1,82 @@
+@page
+@model CheckersWebApp.Pages.CheckersGames.Play
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Game";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - CheckersWebApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    @* <link rel="stylesheet" href="~/CheckersWebApp.styles.css" asp-append-version="true"/> *@
+</head>
+<body class="d-flex justify-content-center">
+
+<div class="d-flex game-div">
+    
+    <div class="left-side-of-game d-flex flex-column">
+        
+        <div class="game-board border border-3 border-dark">
+            
+        </div>
+        
+        
+        <div class="action-buttons d-flex flex-row align-items-center">
+            <div><button class="btn btn-dark text-white">
+                <dix class="home-icon">⌂</dix>
+            </button></div>
+            <div><button class="btn btn-dark text-white">
+                <dix class="go-back-icon">↵</dix>
+            </button></div>
+            <div><button class="btn btn-dark text-white">
+                <dix class="reset-game-icon">↺</dix>
+            </button></div>
+        </div>
+    </div>
+
+    <div class="game-hub d-flex flex-column justify-content-between align-items-center">
+        <div class="mt-4 hub-container border border-3 border-dark d-flex flex-column align-items-center player-container">
+            <div class="fs-5 fw-bold player-name">Player Name</div>
+            <div class="player-separator-line"></div>
+            <div class="pieces-left-div"><span class="checkers-piece-icon">⛃</span><span class="pieces-left"> 12</span></div>
+        </div>
+        
+        <div class="mt-1 mb-1 hub-container border border-3 border-dark d-flex flex-row justify-content-center align-items-center">
+            <div class="current-turn-and-time-emoji">👤</div>
+            <div class="current-turn">Whites Turn</div>
+        </div>
+        
+        <div class="mt-1 mb-1 hub-container border border-3 border-dark d-flex flex-row justify-content-center align-items-center">
+            <div class="current-turn-and-time-emoji">🕒</div>
+            <div class="game-played-for">00:00:00</div>
+        </div>
+        
+        <div class="mb-4 hub-container border border-3 border-dark d-flex flex-column align-items-center player-container">
+            <div class="fs-5 fw-bold player-name">Player Name</div>
+            <div class="player-separator-line"></div>
+            <div class="pieces-left-div"><span class="checkers-piece-icon">⛁</span><span class="pieces-left"> 12</span></div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+</body>
+</html>
+
+@functions
+{
+    
+}

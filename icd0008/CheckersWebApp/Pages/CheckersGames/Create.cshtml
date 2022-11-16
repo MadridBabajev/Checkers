@@ -1,0 +1,70 @@
+@page
+@using Domain.Db
+@model CheckersWebApp.Pages.CheckersGames.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>New Game</h2>
+<hr />
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Create a new game 🏁</h5>
+            </div>
+            <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.GameType" class="control-label mb-1">Game Type</label>
+                        <select asp-for="CheckersGame.GameType" asp-items="Html.GetEnumSelectList<EGameType>()"
+                                class="form-control"></select>
+                        <span asp-validation-for="CheckersGame.GameType" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.GamePlayer1Id" class="control-label mb-1">Player 1</label>
+                        <select asp-for="CheckersGame.GamePlayer1Id" class ="form-control" asp-items="ViewBag.GamePlayer1Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer1Id"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.GamePlayer2Id" class="control-label mb-1"> Player 2</label>
+                        <select asp-for="CheckersGame.GamePlayer2Id" class ="form-control" asp-items="ViewBag.GamePlayer2Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer2Id"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersGame.CheckersOptionsId" class="control-label mb-1">Options</label>
+                        <select asp-for="CheckersGame.CheckersOptionsId" class ="form-control" asp-items="ViewBag.CheckersOptionsId"></select>
+                        <span asp-validation-for="CheckersGame.CheckersOptionsId"></span>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-end">
+                    <div class="form-group text-end">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    </div>
+                    
+                    <div class="mt-2">
+                        <a asp-page="Index" class="btn btn-dark">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,22 +1,21 @@
-using Domain;
-using GameOptions;
-using GameParts;
+using Domain.Db;
 
 namespace DAL;
 
 public interface IGameRepository
 {
-    // crud methods
+    // Set different names in case you use various DB engines
+    string Name { get; }
     
-    // Read
-    public static List<Game>? GetAllGamesList() {return null;}
-    public static Game? GetGameById(string id){return null;}
-
-    // Create and update
-    public static void SaveGame(string id, Options options, EGameType gameType, List<CheckersPiece> boardState) {}
-
-    // Delete
-    public static void DeleteGame(string id){}
+    // CRUD methods
     
-    private static void Main() {}
+    // read
+    Task<List<CheckersGame>> GetGamesList();
+    CheckersGame? GetGameById(string id);
+    
+    // create and update
+    void SaveGame(string id, CheckersGame game);
+    
+    // delete
+    void DeleteGame(string id);
 }

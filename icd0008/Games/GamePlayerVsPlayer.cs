@@ -103,7 +103,7 @@ public class GamePlayerVsPlayer: IGame
     }
     private List<List<string>>? GetAvailableMoves()
     {
-        /*
+        /* TODO MAJOR if this method gets finished, Console app will be finished, but the logic is hard
          * TODO This method calculates all the possible move according to the
          * TODO options, piece's color, queen or not etc.
          */

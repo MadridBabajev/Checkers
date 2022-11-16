@@ -1,0 +1,77 @@
+@page
+@model CheckersWebApp.Pages.CheckersOptions.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>New Options</h2>
+
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Create new options ⚙</h5>
+            </div>
+            <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersOptions.Name" class="control-label">Name</label>
+                        <input asp-for="CheckersOptions.Name" class="form-control mt-1" />
+                        <span asp-validation-for="CheckersOptions.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <input class="form-check-input" asp-for="CheckersOptions.WhitesFirst" /> Whites First
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <input class="form-check-input" asp-for="CheckersOptions.MandatoryTake" /> Mandatory Take
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <input class="form-check-input" asp-for="CheckersOptions.QueensHaveOpMoves" /> Queens OP Moves
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersOptions.BoardWidth" class="control-label">Board Width</label>
+                        <select asp-for="CheckersOptions.BoardWidth" class="form-control mt-1" asp-items="ViewBag.PossibleBounds"></select>
+                        <span asp-validation-for="CheckersOptions.BoardWidth" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="CheckersOptions.BoardHeight" class="control-label">Board Height</label>
+                        <select asp-for="CheckersOptions.BoardHeight" class="form-control mt-1" asp-items="ViewBag.PossibleBounds"></select>
+                        <span asp-validation-for="CheckersOptions.BoardHeight" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="card-footer text-end">
+                    <div class="form-group text-end">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    </div>
+                    
+                    <div class="mt-2">
+                        <a asp-page="Index" class="btn btn-dark">Back to List</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

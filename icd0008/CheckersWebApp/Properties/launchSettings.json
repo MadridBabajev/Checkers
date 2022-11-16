@@ -1,0 +1,57 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:13493",
+      "sslPort": 44305
+    }
+  },
+  "profiles": {
+    "CheckersWebApp": {
+      "commandName": "Project", 
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7054;http://localhost:5120",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+    "Debug": {
+
+      "commandName": "Project",
+
+      "applicationUrl": "https://+:5001;http://+:5000",
+
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+
+      "jsWebView2Debugging": true,
+
+      "hotReloadEnabled": true,
+
+      "hotReloadProfile": "aspnetcore",
+
+      "environmentVariables": {
+
+        "ASPNETCORE_ENVIRONMENT": "Development"
+
+      }
+
+    },
+
+    "Watch": {
+
+      "commandName": "Executable",
+      "workingDirectory": "$(ProjectDir)",
+      "executablePath": "dotnet.exe",
+      "commandLineArgs": "watch run debug --launch-profile Debug"
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
