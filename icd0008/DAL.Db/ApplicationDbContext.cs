@@ -22,6 +22,8 @@ public class ApplicationDbContext: DbContext
         
         modelBuilder.Entity<CheckersGame>().HasOne(p => p.GamePlayer2)
             .WithMany(g => g.GamesAsPlayedP2).HasForeignKey(g => g.GamePlayer2Id);
+
+        // modelBuilder.Entity<CheckersGame>().HasOne();
         
         modelBuilder.Entity<Player>().HasIndex(p => p.PlayerName)
             .IsUnique();

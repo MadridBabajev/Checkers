@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DAL.Db\DAL.Db.csproj" />
+      <ProjectReference Include="..\GameBrain\GameBrain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

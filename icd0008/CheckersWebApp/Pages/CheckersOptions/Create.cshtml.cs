@@ -10,7 +10,7 @@ public class CreateModel : PageModel
     private readonly DAL.Db.ApplicationDbContext _context;
     private readonly List<int> _allowedBoundaries = new()
     {
-        8, 10, 16, 32, 64
+        8, 16, 32
     }; 
 
     public CreateModel(DAL.Db.ApplicationDbContext context)

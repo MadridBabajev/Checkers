@@ -88,10 +88,6 @@ body {
 
 /* TODO General Game properties here */
 
-.game-div {
-  
-}
-
 .game-board {
   
 }
@@ -100,18 +96,7 @@ body {
   align-self: stretch;
 }
 
-/*<div class="action-buttons d-flex flex-row align-items-center">*/
-/*  <div><button class="btn btn-dark text-white">*/
-/*    <dix class="home-icon">⌂</dix>*/
-/*    </button>
-    </div>
-/*  <div class="ml-5"><button class="btn btn-dark text-white">*/
-/*    <dix class="go-back-icon">&#x21BA</dix>*/
-/*    </button>
-    </div>
-/*</div>*/
 .action-buttons {
-  /*margin-top: 1rem;*/
   align-self: stretch;
 }
 
@@ -140,10 +125,19 @@ body {
   position: relative;
 }
 
+.hub-container {
+  background-color: #424949;
+  color: white;
+}
+
+.white-piece {
+  fill: white;
+}
+
 .player-separator-line {
   position: absolute;
-  transform: translate(0, 50px);
-  border: 1px solid #5c636a;
+  transform: translate(0, 45px);
+  border: 1px solid #000000;
   width: 100%;
 }
 
@@ -153,17 +147,18 @@ body {
 
   .game-div {
     /*margin: 16rem 6rem 16rem 6rem;*/
-    margin-top: 10rem;
+    margin-top: 15rem;
     height: 36rem;
     width: 36rem;
   }
 
   .game-board {
-    padding: 13.5rem;
+    min-height: 28rem;
+    min-width: 28rem;
   }
 
   .action-buttons {
-    height: 15rem;
+    height: 7.5rem;
   }
 
   .action-buttons div {
@@ -190,6 +185,7 @@ body {
   }
 
   .game-hub {
+    margin-left: 15px;
     width: 16rem;
     height: 27rem;
   }
@@ -242,6 +238,10 @@ body {
   .checkers-piece-icon {
     display: none;
   }
+
+  .checkers-piece-icon-board {
+    width: 3rem;
+  }
 }
 
 /* ===== Laptop ===== */
@@ -254,7 +254,8 @@ body {
   }
 
   .game-board {
-    padding: 16rem;
+    min-height: 35rem;
+    min-width: 35rem;
   }
   
   .action-buttons {
@@ -285,6 +286,8 @@ body {
   }
 
   .game-hub {
+    margin-top: 25px;
+    margin-left: 15px;
     width: 16rem;
     height: 32rem;
   }
@@ -308,10 +311,13 @@ body {
     font-size: 1.2rem;
     margin-right: 0.5rem;
   }
-
+  
   .checkers-piece-icon {
-    font-size: 2.75rem;
-    margin-bottom: 2px;
+    width: 1.75rem;
+  }
+  
+  .checkers-piece-icon-board {
+    width: 3rem;
   }
 
   .pieces-left {
@@ -324,17 +330,19 @@ body {
 @media screen and (min-width: 1025px) {
   
   .game-div {
-    margin: 4rem 6rem 4rem 6rem;
+    margin: 10rem 6rem 4rem 6rem;
     height: 54rem;
     width: 54rem;
   }
 
   .game-board {
-    padding: 21rem;
+    min-height: 46rem;
+    min-width: 46rem;
   }
   
   .action-buttons {
-    height: 15rem;
+    margin-top: 20px;
+    height: 10rem;
   }
 
   .action-buttons div {
@@ -363,6 +371,8 @@ body {
   }
   
   .game-hub {
+    margin-top: 25px;
+    margin-left: 15px;
     width: 17rem;
     height: 42rem;
   }
@@ -386,10 +396,13 @@ body {
     font-size: 1.4rem;
     margin-right: 0.5rem;
   }
-  
+
   .checkers-piece-icon {
-    font-size: 3.5rem;
-    margin-bottom: 2px;
+    width: 2rem;
+  }
+
+  .checkers-piece-icon-board {
+    width: 3rem;
   }
   
   .pieces-left {

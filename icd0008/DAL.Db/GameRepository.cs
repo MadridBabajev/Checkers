@@ -22,7 +22,34 @@ public class GameRepository : IGameRepository
 
     public CheckersGame? GetGameById(string id) => _dbContext.CheckersGames
         .First(g => g.Id == int.Parse(id));
+
+    public Task<List<GameState>> GetGameStates()
+    {
+        throw new NotImplementedException();
+    }
+
+    public GameState? GetGameLastState()
+    {
+        throw new NotImplementedException();
+    }
     
+    public void AddState(string currentState, int? id)
+    {
+        GameState gs = new GameState
+        {
+            SerializedGameState = currentState
+        };
+        _dbContext.CheckersGames.First(g => g.Id == id!)
+            .GameStates?.Add(gs);
+    }
+
+    public CheckersOptions GetOptionsById(int gameOptionsFk) =>
+        _dbContext.CheckersOptions.First(o => o.Id == gameOptionsFk);
+
+    public Player GetPlayerById(int gamePlayerFk) =>
+        _dbContext.Players.First(p => p.Id == gamePlayerFk);
+    
+
     public async void SaveGame(string id, CheckersGame game)
     {
         var gameFromDb = _dbContext.CheckersGames

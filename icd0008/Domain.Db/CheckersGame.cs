@@ -18,6 +18,6 @@ public class CheckersGame
     public Player? GamePlayer2 { get; set; }
 
     public int CheckersOptionsId { get; set; }
-    public CheckersOptions? CheckersOptions { get; set; }
+    public CheckersOptions CheckersOptions { get; set; } = default!;
     public ICollection<GameState>? GameStates { get; set; }
 }

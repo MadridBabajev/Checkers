@@ -3,7 +3,9 @@ namespace Domain.Db;
 public class CurrentGameState
 {
     public List<CheckersPiece> GameBoard = default!;
-    public bool NextMoveByWhite { get; set; }
+    public bool CurrentMoveByWhite { get; set; }
 
+    public short WhitesLeft { get; set; }
+    public short BlacksLeft { get; set; }
     public static void Main() {}
 }
