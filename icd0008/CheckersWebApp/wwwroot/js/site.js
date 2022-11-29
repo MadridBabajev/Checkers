@@ -12,22 +12,16 @@ function addOnClickListeners() {
     addButtonsOnClickListeners();
     const tiles = document.querySelectorAll('.checkersTile');
     
-    // TODO MAJOR Before adding an event listener, remove the previous one to prevent duplicates
     tiles.forEach(tile => {
         if (tile.dataset.has_piece === "1") {
-            
             tile.removeEventListener("click", selectClickListener.bind(null, tile))
             tile.addEventListener("click", selectClickListener.bind(null, tile))
-            
         }
     });
 }
 
 function selectClickListener(tile) {
-    
     let [x, y] = tile.dataset.coordinates.split(":");
-    // const urlParams = new URLSearchParams(window.location.search);
-
     selectAPiece(x, y, getCurrentGameId());
     return "";
 }
@@ -58,12 +52,19 @@ function changeSelectedTileColor(x, y, tiles) {
 }
 
 function changePossibleMovesColor(possibleTiles, tiles, selectedX, selectedY) {
+    // TODO MAJOR Before adding an event listener, 
+    //  remove the previous one to prevent stacking listeners
+    
+    // The format of tile representation -> 1:2, 2:5...
     const selectedTile = `${selectedX}:${selectedY}`;
+    
+    // All valid moves received from the backend in the corrects format
     const possibleTileAsStrings = getPossibleTilesStrings(possibleTiles);
+
+    // Cycles through all the black tiles and ignores the currently selected tile
     tiles.forEach(tile => {
-        if (tile.dataset.coordinates === selectedTile) {
-            
-        } else {
+        if (tile.dataset.coordinates === selectedTile) {} 
+        else {
             if (possibleTileAsStrings.includes(tile.dataset.coordinates)) {
                 tile.style.backgroundColor = '#27AE60';
                 tile.addEventListener("click", () => makeAMove(selectedTile, tile))
@@ -86,10 +87,8 @@ function makeAMove(selectedTileStr, tile) {
     
     [xFrom, yFrom] = selectedTileStr.split(":");
     [xTo, yTo] = tile.dataset.coordinates.split(":");
-    console.log(selectedTileStr);
-    console.log(tile.dataset.coordinates);
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id')
+    
+    const id = getCurrentGameId()
     
     $.ajax({
         url: `Play?id=${id}&handler=MakeAMove`,
@@ -106,16 +105,17 @@ function addButtonsOnClickListeners() {
         .addEventListener("click", goOneMoveBack);
     document.getElementById("restart-game-button")
         .addEventListener("click", restartGame);
+    document.getElementById("player-surrender-button")
+        .addEventListener("click", playerSurrender);
 }
 
 function goOneMoveBack() {
-    console.log("Got here");
-    
+    const id = getCurrentGameId()
     $.ajax({
-        url: `Play?id=${getCurrentGameId()}&handler=ReverseMove`,
+        url: `Play?id=${id}&handler=ReverseMove`,
         success: () => {
             
-            window.location = `Play?id=${getCurrentGameId()}`;
+            window.location = `Play?id=${id}`;
         },
         error: (error) => alert("Error: " + error)
     })
@@ -125,10 +125,24 @@ function restartGame() {
     
     let toExecute = confirm("Are you sure you want to restart the game?");
     if (!toExecute) return;
+    const id = getCurrentGameId()
     $.ajax({
-        url: `Play?id=${getCurrentGameId()}&handler=RestartGame`,
+        url: `Play?id=${id}&handler=RestartGame`,
         success: () => {
-            window.location = `Play?id=${getCurrentGameId()}`;
+            window.location = `Play?id=${id}`;
+        },
+        error: (error) => alert("Error: " + error)
+    })
+}
+
+function playerSurrender() {
+    let toExecute = confirm("Are you sure you want surrender? The game will be over.");
+    if (!toExecute) return;
+    const id = getCurrentGameId()
+    $.ajax({
+        url: `Play?id=${id}&handler=PlayerSurrender`,
+        success: () => {
+            window.location = `Play?id=${id}`;
         },
         error: (error) => alert("Error: " + error)
     })

@@ -98,12 +98,14 @@ public class GameBrain
                 if (piece.XCoordinate == x && piece.YCoordinate == y) continue;
                 if (piece.XCoordinate == move[0] && piece.YCoordinate == move[1])
                 {
+                    // Piece was found diagonally, now it checks, whether it it 2 pieces in a row
+                    // e.g piece = 1:1; it checks if there is a piece on 2:2
                     pieceFound = true;
                     List<int> tileInAValidDirection = GetTileInAValidDirection(x, move[0], y, move[1]);
                     var pieceOnFoundTile = FindPieceAt(tileInAValidDirection[0], tileInAValidDirection[1]);
                     
                     // If piece found, define the colors and decide whether the move is possible
-                    // (Return a list with a single element)
+                    // (Return a list with a single element if mandatory take is on)
                     if (pieceOnFoundTile == null)
                     {
                         // Opponents tile was on the way
@@ -111,7 +113,7 @@ public class GameBrain
                             || !_backEndState.CurrentMoveByWhite && piece.Color == EPieceColor.White)
                         {
                             // Check if the move is within the board limits
-                            if (!MoveOutsideOfBorders(tileInAValidDirection))
+                            if (NotMoveOutsideOfBorders(tileInAValidDirection))
                             {
                                 if (_options.MandatoryTake)
                                 {
@@ -122,19 +124,17 @@ public class GameBrain
                             }
                         }
                     }
-                    break;
                 }
             }
             // For loop ended, check if any piece was found.
             if (!pieceFound && MoveCanBeMadeForThisPiece(x, y, move)) retList.Add(move);
         }
-
+        
         return retList;
     }
-
+    
     private bool MoveCanBeMadeForThisPiece(int x, int y, List<int> move)
     {
-        // TODO MAJOR Also check the piece color whether it can go in that direction or not
         CheckersPiece selected = FindPieceAt(x, y)!;
         if (!selected.IsQueen)
         {
@@ -142,11 +142,11 @@ public class GameBrain
             if (selected.Color == EPieceColor.Black && move[1] < y) return false;
             return true;
         }
-        Console.WriteLine("Not implemented for OP Queens");
+        // TODO Not implemented for OP Queens, simply returns true
         return true;
     }
 
-    private bool MoveOutsideOfBorders(List<int> tileInAValidDirection)
+    private bool NotMoveOutsideOfBorders(List<int> tileInAValidDirection)
     {
         return tileInAValidDirection[0] != _options.BoardWidth 
                && tileInAValidDirection[0] != -1 
@@ -212,48 +212,59 @@ public class GameBrain
 
     public void MakeAMove(int xFrom, int yFrom, int xTo, int yTo)
     {
-        // Console.WriteLine("\n \n ====== Make a move inside a game brain ====== \n \n");
-        // Console.WriteLine($"===== from x-{xFrom} y-{yFrom} to x-{xTo} y-{yTo} =====");
-        
-        foreach (var piece in _backEndState.GameBoard)
-        {
-            Console.WriteLine(piece);
-        }
-        
+
         CheckersPiece selected = FindPieceAt(xFrom, yFrom)!;
         selected.XCoordinate = (short) xTo;
         selected.YCoordinate = (short) yTo;
 
-        Console.WriteLine("\n \n ====== After ====== \n \n");
-        
-        foreach (var piece in _backEndState.GameBoard)
-        {
-            Console.WriteLine(piece);
-        }
-
         // TODO decide whether the turn is over and remove the necessary piece.
-
-        var pieceWasTaken = false;
-        int diagonalDistance = GetDiagonalDistanceOfTheMove(xFrom, yFrom, xTo, yTo);
-        if (diagonalDistance == 2)
+        var pieceTaken = false;
+        if (GetDiagonalDistanceOfTheMove(xFrom, yFrom, xTo, yTo) > 2)
         {
             int xToRemove = (xFrom + xTo) / 2;
             int yToRemove = (yFrom + yTo) / 2;
             _backEndState.GameBoard.Remove(FindPieceAt(xToRemove, yToRemove)!);
-            pieceWasTaken = true;
+            pieceTaken = true;
         }
 
-        if (!pieceWasTaken) _backEndState.CurrentMoveByWhite = !_backEndState.CurrentMoveByWhite;
-
-            // TODO MAJOR render the board after the move
+        if (!MorePiecesCanBeTaken(selected, pieceTaken)) _backEndState.CurrentMoveByWhite = !_backEndState.CurrentMoveByWhite;
+        
+        if (PieceReachedTheEnd(selected, yTo)) selected.IsQueen = true;
         FrontEndState =
             WebUIBoardHandler.CreateFrontEndBoard(_backEndState.GameBoard,
                 _options.BoardHeight, _options.BoardWidth);
     }
 
-    private int GetDiagonalDistanceOfTheMove(int xFrom, int yFrom, int xTo, int yTo)
+    private bool MorePiecesCanBeTaken(CheckersPiece movedPiece, bool pieceTaken)
+    {
+        // TODO Check if more pieces can be taken
+        if (!pieceTaken) return false;
+        var possibleMoves = GetPossibleMoves(movedPiece.XCoordinate, movedPiece.YCoordinate);
+        foreach (var move in possibleMoves)
+        {
+            if (GetDiagonalDistanceOfTheMove(movedPiece.XCoordinate, movedPiece.YCoordinate,
+                    move[0], move[1]) > 2) return true;
+        }
+        return false;
+    }
+    
+    private bool PieceReachedTheEnd(CheckersPiece selectedPiece, int yNew)
+    {
+        switch (selectedPiece.Color)
+        {
+            case EPieceColor.White:
+                if (yNew == 0 && !selectedPiece.IsQueen) return true;
+                break;
+            case EPieceColor.Black:
+                if (yNew == _options.BoardHeight - 1 && !selectedPiece.IsQueen) return true;
+                break;
+        }
+        return false;
+    }
+    
+    private double GetDiagonalDistanceOfTheMove(int xFrom, int yFrom, int xTo, int yTo)
         // c = √((xA − xB)^2 + (yA − yB)^2)
         // c -> distance
-        => Convert.ToInt32(Math.Sqrt(Math.Pow(xTo-xFrom,2) + Math.Pow(yTo-yFrom,2)));
+        => Math.Sqrt(Math.Pow(xTo-xFrom,2) + Math.Pow(yTo-yFrom,2));
         
 }

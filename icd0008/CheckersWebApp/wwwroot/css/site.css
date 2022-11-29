@@ -110,12 +110,24 @@ body {
   position: absolute;
 }
 
+.player-name {
+  position: absolute;
+}
+
+.surrender-icon {
+  position: absolute;
+}
+
 .hub-container {
   border-radius: 1rem;
   position: relative;
 }
 
 .player-container {
+  position: relative;
+}
+
+.player-name-div {
   position: relative;
 }
 
@@ -178,6 +190,11 @@ body {
     transform: translate(-20px, -45px);
   }
 
+  .surrender-icon {
+    width: 2.5rem;
+    transform: translate(-15px, -15px);
+  }
+
   .game-hub {
     margin-left: 15px;
     width: 16rem;
@@ -205,7 +222,8 @@ body {
   }
   
   .player-name {
-    margin-left: 2px;
+    font-size: 1rem;
+    transform: translate(-45px, 18px);
   }
 
   .pieces-left {
@@ -235,6 +253,10 @@ body {
 
   .checkers-piece-icon-board {
     width: 3rem;
+  }
+
+  .checkers-piece-icon-board-queen {
+    width: 3.75rem;
   }
 }
 
@@ -279,6 +301,11 @@ body {
     transform: translate(-30px, -65px);
   }
 
+  .surrender-icon {
+    width: 3.5rem;
+    transform: translate(-25px, -30px);
+  }
+
   .game-hub {
     margin-top: 25px;
     margin-left: 15px;
@@ -306,12 +333,21 @@ body {
     margin-right: 0.5rem;
   }
   
+  .player-name {
+    font-size: 1.3rem;
+    transform: translate(-35px, 5px);
+  }
+  
   .checkers-piece-icon {
     width: 1.75rem;
   }
   
   .checkers-piece-icon-board {
     width: 3rem;
+  }
+  
+  .checkers-piece-icon-board-queen {
+    width: 3.75rem;
   }
 
   .pieces-left {
@@ -363,6 +399,11 @@ body {
     font-size: 6.5rem;
     transform: translate(-40px, -85px);
   }
+
+  .surrender-icon {
+    width: 5.5rem;
+    transform: translate(-35px, -40px);
+  }
   
   .game-hub {
     margin-top: 25px;
@@ -397,6 +438,10 @@ body {
 
   .checkers-piece-icon-board {
     width: 3rem;
+  }
+
+  .checkers-piece-icon-board-queen {
+    width: 3.75rem;
   }
   
   .pieces-left {
