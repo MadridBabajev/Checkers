@@ -47,6 +47,18 @@
                 </div>
                 
                 <div class="card-body">
+                    <div class="form-group ">
+                        <label asp-for="CheckersGame.StartedAt" class="control-label">White pieces left: @ViewData["WhitesLeft"]</label>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label asp-for="CheckersGame.StartedAt" class="control-label">Black pieces left: @ViewData["BlacksLeft"]</label>
+                    </div>
+                </div>
+                
+                <div class="card-body">
                     <div class="form-group">
                         <label asp-for="CheckersGame.CheckersOptionsId" class="control-label">Options</label>
                         <select asp-for="CheckersGame.CheckersOptionsId" aria-label="Disabled select example" disabled class="form-control">

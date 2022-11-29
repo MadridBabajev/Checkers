@@ -1,15 +1,16 @@
-﻿using Domain.Db;
+﻿
+using Domain.Db;
 using WebUIHandler;
 
 namespace GameBrain;
 
 public class GameBrain
 {
-    private readonly CurrentGameState _backEndState;
+    private CurrentGameState _backEndState;
     public string FrontEndState = "";
     private readonly CheckersOptions _options;
     // private CheckersPiece? _currentlySelectedPiece = null;
-    public GameBrain(CheckersOptions options, GameState? lastState)
+    public GameBrain(CheckersOptions options, string? lastState)
     {
         _options = options;
         if (lastState == null)
@@ -19,7 +20,7 @@ public class GameBrain
         }
         else
         {
-            _backEndState = System.Text.Json.JsonSerializer.Deserialize<CurrentGameState>(lastState.SerializedGameState)!;
+            _backEndState = System.Text.Json.JsonSerializer.Deserialize<CurrentGameState>(lastState)!;
             FrontEndState = WebUIBoardHandler.CreateFrontEndBoard(_backEndState.GameBoard,
                 _options.BoardHeight, _options.BoardWidth);
         }
@@ -29,7 +30,7 @@ public class GameBrain
     {
         _backEndState.GameBoard = new List<CheckersPiece>();
         
-        // TODO Set initial checkers coordinates and color
+        // Set initial checkers coordinates and color
 
         var whiteRange = _options.BoardHeight - 3;
         var currentlyWhiteTile = false;
@@ -70,7 +71,6 @@ public class GameBrain
         FrontEndState = WebUIBoardHandler.CreateFrontEndBoard(_backEndState.GameBoard,
             _options.BoardHeight, _options.BoardWidth);
         
-        // TODO when a move is made, serialize current state and create a new one 
     }
 
     public CurrentGameState GetCurrentGameState()
@@ -102,8 +102,7 @@ public class GameBrain
                     List<int> tileInAValidDirection = GetTileInAValidDirection(x, move[0], y, move[1]);
                     var pieceOnFoundTile = FindPieceAt(tileInAValidDirection[0], tileInAValidDirection[1]);
                     
-                    // TODO if piece found, define the colors and decide whether the move is possible
-                    // Also try applying mandatory take rule here
+                    // If piece found, define the colors and decide whether the move is possible
                     // (Return a list with a single element)
                     if (pieceOnFoundTile == null)
                     {
@@ -127,11 +126,24 @@ public class GameBrain
                 }
             }
             // For loop ended, check if any piece was found.
-            // TODO Also check the piece color whether it can go in that direction or not
-            if (!pieceFound) retList.Add(move);
+            if (!pieceFound && MoveCanBeMadeForThisPiece(x, y, move)) retList.Add(move);
         }
 
         return retList;
+    }
+
+    private bool MoveCanBeMadeForThisPiece(int x, int y, List<int> move)
+    {
+        // TODO MAJOR Also check the piece color whether it can go in that direction or not
+        CheckersPiece selected = FindPieceAt(x, y)!;
+        if (!selected.IsQueen)
+        {
+            if (selected.Color == EPieceColor.White && move[1] > y) return false;
+            if (selected.Color == EPieceColor.Black && move[1] < y) return false;
+            return true;
+        }
+        Console.WriteLine("Not implemented for OP Queens");
+        return true;
     }
 
     private bool MoveOutsideOfBorders(List<int> tileInAValidDirection)
@@ -192,21 +204,56 @@ public class GameBrain
         return retList;
     }
 
-    private HashSet<List<int>> GetCoordinatesSet(int x, int y)
-    {
-        HashSet<List<int>> retSet = new();
-        foreach (var piece in _backEndState.GameBoard)
-        {
-            if (piece.XCoordinate == x && piece.YCoordinate == y) continue;
-            retSet.Add(new List<int> {x, y});
-        }
-
-        return retSet;
-    }
-
     private CheckersPiece? FindPieceAt(int x, int y)
     {
         return _backEndState.GameBoard
             .FirstOrDefault(piece => piece.XCoordinate == x && piece.YCoordinate == y);
     }
+
+    public void MakeAMove(int xFrom, int yFrom, int xTo, int yTo)
+    {
+        // Console.WriteLine("\n \n ====== Make a move inside a game brain ====== \n \n");
+        // Console.WriteLine($"===== from x-{xFrom} y-{yFrom} to x-{xTo} y-{yTo} =====");
+        
+        foreach (var piece in _backEndState.GameBoard)
+        {
+            Console.WriteLine(piece);
+        }
+        
+        CheckersPiece selected = FindPieceAt(xFrom, yFrom)!;
+        selected.XCoordinate = (short) xTo;
+        selected.YCoordinate = (short) yTo;
+
+        Console.WriteLine("\n \n ====== After ====== \n \n");
+        
+        foreach (var piece in _backEndState.GameBoard)
+        {
+            Console.WriteLine(piece);
+        }
+
+        // TODO decide whether the turn is over and remove the necessary piece.
+
+        var pieceWasTaken = false;
+        int diagonalDistance = GetDiagonalDistanceOfTheMove(xFrom, yFrom, xTo, yTo);
+        if (diagonalDistance == 2)
+        {
+            int xToRemove = (xFrom + xTo) / 2;
+            int yToRemove = (yFrom + yTo) / 2;
+            _backEndState.GameBoard.Remove(FindPieceAt(xToRemove, yToRemove)!);
+            pieceWasTaken = true;
+        }
+
+        if (!pieceWasTaken) _backEndState.CurrentMoveByWhite = !_backEndState.CurrentMoveByWhite;
+
+            // TODO MAJOR render the board after the move
+        FrontEndState =
+            WebUIBoardHandler.CreateFrontEndBoard(_backEndState.GameBoard,
+                _options.BoardHeight, _options.BoardWidth);
+    }
+
+    private int GetDiagonalDistanceOfTheMove(int xFrom, int yFrom, int xTo, int yTo)
+        // c = √((xA − xB)^2 + (yA − yB)^2)
+        // c -> distance
+        => Convert.ToInt32(Math.Sqrt(Math.Pow(xTo-xFrom,2) + Math.Pow(yTo-yFrom,2)));
+        
 }

@@ -3,30 +3,33 @@
 
 // Write your JavaScript code.
 
-// function convertStringToHtml(content) {
-//     const board = document.getElementById("gameBoard")
-//     const parser = new DOMParser();
-//     let newNode = parser.parseFromString(content, "text/xml");
-//    
-//     board.appendChild(newNode.documentElement);
-// }
+function getCurrentGameId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id')
+}
 
-function addTileOnClickListeners() {
-    const tiles = document.querySelectorAll('.checkersTile')
-    // TODO, here, event listeners are added, they will have to be removed 
-    //  and adjusted based on player's moves
+function addOnClickListeners() {
+    addButtonsOnClickListeners();
+    const tiles = document.querySelectorAll('.checkersTile');
+    
+    // TODO MAJOR Before adding an event listener, remove the previous one to prevent duplicates
     tiles.forEach(tile => {
         if (tile.dataset.has_piece === "1") {
-            tile.addEventListener('click', () => {
-                // TODO currently all tiles are valid,
-                //  later, they should pass the check and become invalid when piece gets moved
-                let [x, y] = tile.dataset.coordinates.split(":");
-                const urlParams = new URLSearchParams(window.location.search);
-                
-                selectAPiece(x, y, urlParams.get('id'));
-            })
+            
+            tile.removeEventListener("click", selectClickListener.bind(null, tile))
+            tile.addEventListener("click", selectClickListener.bind(null, tile))
+            
         }
     });
+}
+
+function selectClickListener(tile) {
+    
+    let [x, y] = tile.dataset.coordinates.split(":");
+    // const urlParams = new URLSearchParams(window.location.search);
+
+    selectAPiece(x, y, getCurrentGameId());
+    return "";
 }
 
 function selectAPiece(x, y, id) {
@@ -40,7 +43,7 @@ function selectAPiece(x, y, id) {
             changePossibleMovesColor(data, tiles, x, y)
         },
         error: (error) => alert("Error: " + error)
-    })
+    });
 }
 
 function changeSelectedTileColor(x, y, tiles) {
@@ -63,6 +66,7 @@ function changePossibleMovesColor(possibleTiles, tiles, selectedX, selectedY) {
         } else {
             if (possibleTileAsStrings.includes(tile.dataset.coordinates)) {
                 tile.style.backgroundColor = '#27AE60';
+                tile.addEventListener("click", () => makeAMove(selectedTile, tile))
             } else {
                 tile.style.backgroundColor = '#2980B9';
             }
@@ -76,4 +80,56 @@ function getPossibleTilesStrings(possibleTiles) {
         retList.push(`${list[0]}:${list[1]}`);
     });
     return retList;
+}
+
+function makeAMove(selectedTileStr, tile) {
+    
+    [xFrom, yFrom] = selectedTileStr.split(":");
+    [xTo, yTo] = tile.dataset.coordinates.split(":");
+    console.log(selectedTileStr);
+    console.log(tile.dataset.coordinates);
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id')
+    
+    $.ajax({
+        url: `Play?id=${id}&handler=MakeAMove`,
+        data: jQuery.param({xfrom: `${xFrom}`, yfrom: `${yFrom}`, xto: `${xTo}`, yto: `${yTo}`}),
+        success: () => {
+            window.location = `Play?id=${id}`;
+        },
+        error: (error) => alert("Error: " + error)
+    });
+}
+
+function addButtonsOnClickListeners() {
+    document.getElementById("reverse-move-button")
+        .addEventListener("click", goOneMoveBack);
+    document.getElementById("restart-game-button")
+        .addEventListener("click", restartGame);
+}
+
+function goOneMoveBack() {
+    console.log("Got here");
+    
+    $.ajax({
+        url: `Play?id=${getCurrentGameId()}&handler=ReverseMove`,
+        success: () => {
+            
+            window.location = `Play?id=${getCurrentGameId()}`;
+        },
+        error: (error) => alert("Error: " + error)
+    })
+}
+
+function restartGame() {
+    
+    let toExecute = confirm("Are you sure you want to restart the game?");
+    if (!toExecute) return;
+    $.ajax({
+        url: `Play?id=${getCurrentGameId()}&handler=RestartGame`,
+        success: () => {
+            window.location = `Play?id=${getCurrentGameId()}`;
+        },
+        error: (error) => alert("Error: " + error)
+    })
 }

@@ -32,10 +32,25 @@ public class EditModel : PageModel
             return NotFound();
         }
         CheckersGame = checkersGame;
-       // ViewData["CheckersOptionsId"] = new SelectList(_context.CheckersOptions, "Id", "Name");
-       
-       ViewData["GamePlayer1Id"] = new SelectList(_context.Players, "Id", "PlayerName");
-       ViewData["GamePlayer2Id"] = new SelectList(_context.Players, "Id", "PlayerName");
+        
+        var lastState = _context.GameStates.Where(gs => gs.CheckersGameId == id)
+            .OrderByDescending(gs => gs.CreatedAt)
+            .FirstOrDefault();
+        if (lastState == null)
+        {
+            ViewData["WhitesLeft"] = "default";
+            ViewData["BlacksLeft"] = "default";
+        }
+        else
+        {
+            var deserializedState = System.Text.Json.JsonSerializer
+                .Deserialize<CurrentGameState>(lastState.SerializedGameState)!;
+            ViewData["WhitesLeft"] = deserializedState.WhitesLeft;
+            ViewData["BlacksLeft"] = deserializedState.BlacksLeft;
+        }
+
+        ViewData["GamePlayer1Id"] = new SelectList(_context.Players, "Id", "PlayerName");
+        ViewData["GamePlayer2Id"] = new SelectList(_context.Players, "Id", "PlayerName");
         return Page();
     }
 

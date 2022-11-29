@@ -86,12 +86,6 @@ body {
 100px				6rem
 */
 
-/* TODO General Game properties here */
-
-.game-board {
-  
-}
-
 .game-hub {
   align-self: stretch;
 }
@@ -100,7 +94,7 @@ body {
   align-self: stretch;
 }
 
-.action-buttons div button {
+.action-buttons div button, .action-buttons div a {
   position: relative;
 }
 
@@ -165,7 +159,7 @@ body {
     margin-left: 3.5rem;
   }
 
-  .action-buttons div button {
+  .action-buttons div button, .action-buttons div a {
     padding: 2rem;
   }
 
@@ -266,13 +260,13 @@ body {
     margin-left: 3.5rem;
   }
 
-  .action-buttons div button {
+  .action-buttons div button, .action-buttons div a {
     padding: 2.5rem;
   }
 
   .home-icon {
     font-size: 6rem;
-    transform: translate(-27px, -85px);
+    transform: translate(-29px, -85px);
   }
 
   .go-back-icon {
@@ -349,7 +343,7 @@ body {
     margin-left: 4.5rem;
   }
 
-  .action-buttons div button {
+  .action-buttons div button, .action-buttons div a {
     max-height: 4.5rem;
     max-width: 4.5rem;
     padding: 4.5rem;

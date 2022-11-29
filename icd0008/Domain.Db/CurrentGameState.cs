@@ -2,7 +2,7 @@ namespace Domain.Db;
 
 public class CurrentGameState
 {
-    public List<CheckersPiece> GameBoard = default!;
+    public List<CheckersPiece> GameBoard { get; set; } = default!;
     public bool CurrentMoveByWhite { get; set; }
 
     public short WhitesLeft { get; set; }

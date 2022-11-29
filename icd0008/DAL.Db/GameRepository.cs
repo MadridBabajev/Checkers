@@ -20,7 +20,7 @@ public class GameRepository : IGameRepository
     public async Task<List<CheckersGame>> GetGamesList() 
         => await _dbContext.CheckersGames.ToListAsync();
 
-    public CheckersGame? GetGameById(string id) => _dbContext.CheckersGames
+    public CheckersGame GetGameById(string id) => _dbContext.CheckersGames
         .First(g => g.Id == int.Parse(id));
 
     public Task<List<GameState>> GetGameStates()
@@ -28,19 +28,26 @@ public class GameRepository : IGameRepository
         throw new NotImplementedException();
     }
 
-    public GameState? GetGameLastState()
+    public GameState? GetGameLastState(int gameFk)
     {
-        throw new NotImplementedException();
+        
+        return _dbContext.GameStates.Where(gs => gs.CheckersGameId == gameFk)
+            .OrderByDescending(gs => gs.CreatedAt)
+            .FirstOrDefault();
     }
-    
-    public void AddState(string currentState, int? id)
+
+    public GameState? GetGameLastStateDeserialized(int gameFk)
+    => _dbContext.GameStates.FirstOrDefault(gs => gs.CheckersGameId == gameFk);
+
+    public void AddState(string currentState, int id)
     {
-        GameState gs = new GameState
+        var gs = new GameState
         {
-            SerializedGameState = currentState
+            SerializedGameState = currentState,
+            CheckersGameId = id
         };
-        _dbContext.CheckersGames.First(g => g.Id == id!)
-            .GameStates?.Add(gs);
+        _dbContext.GameStates.Add(gs);
+        _dbContext.SaveChangesAsync();
     }
 
     public CheckersOptions GetOptionsById(int gameOptionsFk) =>
@@ -77,6 +84,19 @@ public class GameRepository : IGameRepository
     {
         var gameFromDb = GetGameById(id);
         _dbContext.CheckersGames.Remove(gameFromDb!);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteGameState(GameState gameState)
+    {
+        _dbContext.GameStates.Remove(gameState);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAllGameStates(int gameFk)
+    {
+        await _dbContext.Database.ExecuteSqlRawAsync(
+            $"DELETE FROM GameStates WHERE CheckersGameId = {gameFk}");
         await _dbContext.SaveChangesAsync();
     }
 }

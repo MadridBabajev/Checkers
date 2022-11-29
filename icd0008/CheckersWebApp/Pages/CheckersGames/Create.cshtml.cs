@@ -30,17 +30,15 @@ public class CreateModel : PageModel
     // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
-      if (!ModelState.IsValid)
-      {
-          return Page();
-      }
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
 
-      CheckersGame.StartedAt = DateTime.Today;
-          
-      _context.CheckersGames.Add(CheckersGame);
-      await _context.SaveChangesAsync();
+        CheckersGame.StartedAt = DateTime.Today;
+        _context.CheckersGames.Add(CheckersGame);
+        await _context.SaveChangesAsync();
 
-      return RedirectToPage("./Play");
+        return Redirect($"/CheckersGames/Play?id={CheckersGame.Id}");
     }
 }
-

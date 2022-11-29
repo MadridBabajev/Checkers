@@ -12,6 +12,8 @@ public class CheckersPiece
         YCoordinate = y;
         Color = color;
     }
+    
+    public CheckersPiece() {}
     public override string ToString()
     {
         return $"{Color.ToString()} piece at {XCoordinate}-{YCoordinate}";

@@ -13,7 +13,9 @@ public interface IGameRepository
     Task<List<CheckersGame>> GetGamesList();
     CheckersGame? GetGameById(string id);
     Task<List<GameState>> GetGameStates();
-    GameState? GetGameLastState();
+    GameState? GetGameLastState(int id);
+
+    GameState? GetGameLastStateDeserialized(int gameFk);
 
     CheckersOptions GetOptionsById(int gameOptionsFk);
     
@@ -21,8 +23,12 @@ public interface IGameRepository
 
     // create and update
     void SaveGame(string id, CheckersGame game);
-    void AddState(string currentState, int? id);
+    void AddState(string currentState, int id);
     
     // delete
     void DeleteGame(string id);
+
+    Task DeleteGameState(GameState gameState);
+
+    Task DeleteAllGameStates(int id);
 }
