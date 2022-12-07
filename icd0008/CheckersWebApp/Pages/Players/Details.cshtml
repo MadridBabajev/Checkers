@@ -12,67 +12,57 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Player.PlayerName)
+            Name:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Player.PlayerName)
+            @Model.Player.PlayerName
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Player.PlayerType)
+            Type:
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Player.PlayerType)
+            @Model.Player.PlayerType
         </dd>
     </dl>
     
     <table class="table mt-1 table-striped table-hover">
-    <thead>
+        <thead>
         <tr>
             <th>
-                StartedAt
+                Started at
             </th>
             <th>
-                GameOverAt
+                Over at
             </th>
             <th>
-                GameType
+                Type
             </th>
             <th>
-                GamePlayer1
-            </th>
-            <th>
-                GamePlayer2
-            </th>
-            <th>
-                CheckersOptions
+                Options
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.GetGamesByDate()) {
+        </thead>
+        <tbody>
+        @foreach (var item in Model.GetGamesByDate()) {
             <tr>
-                <th>
-                    Started at
-                </th>
-                <th>
-                    Over at
-                </th>
-                <th>
-                    Game Type
-                </th>
-                <th>
-                    Player 1
-                </th>
-                <th>
-                    Player 2
-                </th>
-                <th>
-                    Options
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GameOverAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GameType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckersOptions!.Name)
+                </td>
                 <td>
                     <div class="d-flex flex-row text-center">
+                        <div class="p-1">
+                            <a asp-page="./Play" asp-route-id="@item.Id" class="btn btn-success">Continue</a>
+                        </div>
                         <div class="p-1">
                             <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-dark">Edit</a>
                         </div>
@@ -84,9 +74,8 @@
                         </div>
                     </div>
                 </td>
-
             </tr>
-    }
+        }
         </tbody>
     </table>
     

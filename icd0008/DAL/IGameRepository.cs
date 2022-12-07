@@ -12,7 +12,6 @@ public interface IGameRepository
     // read
     Task<List<CheckersGame>> GetGamesList();
     CheckersGame? GetGameById(string id);
-    Task<List<GameState>> GetGameStates();
     GameState? GetGameLastState(int id);
 
     GameState? GetGameLastStateDeserialized(int gameFk);

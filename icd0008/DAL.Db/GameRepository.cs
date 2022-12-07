@@ -23,11 +23,6 @@ public class GameRepository : IGameRepository
     public CheckersGame GetGameById(string id) => _dbContext.CheckersGames
         .First(g => g.Id == int.Parse(id));
 
-    public Task<List<GameState>> GetGameStates()
-    {
-        throw new NotImplementedException();
-    }
-
     public GameState? GetGameLastState(int gameFk)
     {
         

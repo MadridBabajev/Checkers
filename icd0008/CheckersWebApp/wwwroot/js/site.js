@@ -14,7 +14,6 @@ function addOnClickListeners() {
     
     tiles.forEach(tile => {
         if (tile.dataset.has_piece === "1") {
-            tile.removeEventListener("click", selectClickListener.bind(null, tile))
             tile.addEventListener("click", selectClickListener.bind(null, tile))
         }
     });
@@ -23,7 +22,6 @@ function addOnClickListeners() {
 function selectClickListener(tile) {
     let [x, y] = tile.dataset.coordinates.split(":");
     selectAPiece(x, y, getCurrentGameId());
-    return "";
 }
 
 function selectAPiece(x, y, id) {
@@ -35,8 +33,7 @@ function selectAPiece(x, y, id) {
             
             changeSelectedTileColor(x, y, tiles)
             changePossibleMovesColor(data, tiles, x, y)
-        },
-        error: (error) => alert("Error: " + error)
+        }
     });
 }
 
@@ -52,8 +49,6 @@ function changeSelectedTileColor(x, y, tiles) {
 }
 
 function changePossibleMovesColor(possibleTiles, tiles, selectedX, selectedY) {
-    // TODO MAJOR Before adding an event listener, 
-    //  remove the previous one to prevent stacking listeners
     
     // The format of tile representation -> 1:2, 2:5...
     const selectedTile = `${selectedX}:${selectedY}`;
@@ -63,13 +58,21 @@ function changePossibleMovesColor(possibleTiles, tiles, selectedX, selectedY) {
 
     // Cycles through all the black tiles and ignores the currently selected tile
     tiles.forEach(tile => {
+        console.log(tile)
         if (tile.dataset.coordinates === selectedTile) {} 
         else {
             if (possibleTileAsStrings.includes(tile.dataset.coordinates)) {
                 tile.style.backgroundColor = '#27AE60';
-                tile.addEventListener("click", () => makeAMove(selectedTile, tile))
+                let clonedTile = tile.cloneNode(true);
+                clonedTile.addEventListener("click", selectClickListener.bind(null, clonedTile));
+                clonedTile.addEventListener("click", makeAMove.bind(null, selectedTile, tile));
+                tile.replaceWith(clonedTile);
             } else {
                 tile.style.backgroundColor = '#2980B9';
+                let clonedTile = tile.cloneNode(true);
+                clonedTile.addEventListener("click", selectClickListener.bind(null, clonedTile))
+                tile.replaceWith(clonedTile);
+
             }
         }
     });

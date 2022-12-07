@@ -27,7 +27,9 @@ public class Play : PageModel
 
     private void PlayFactory(int id)
     {
-        
+        // TODO make persistent objects, remember, html is stateless
+        // TODO and the objects initially created will be gone, find your way around it
+        // TODO Right now there is a lot of queries made after just 1 click
         CheckersGame = _gameRepo.GetGameById(id.ToString())!;
 
         Options = _gameRepo.GetOptionsById(CheckersGame.CheckersOptionsId);
@@ -70,7 +72,6 @@ public class Play : PageModel
 
     public JsonResult OnGetReverseMove(int id)
     {
-        // TODO It successfully deletes the last state, but does not render the board
         PlayFactory(id);
         if (CheckersGame.GameOverAt != null) return new JsonResult("");
         var lastState = _gameRepo.GetGameLastStateDeserialized(id);
@@ -98,10 +99,6 @@ public class Play : PageModel
 
     public JsonResult OnGetSelectAPiece(int id, int x, int y)
     {
-        // TODO make persistent objects, remember, html is stateless
-        // TODO and the objects initially created will be gone, find your way around it
-        // TODO Right now there is a lot of queries made after just 1 click
-        
         List<List<int>> retList = new();
         try
         {
@@ -129,6 +126,7 @@ public class Play : PageModel
             Console.WriteLine("Failed");
         }
 
+        Console.WriteLine("\n \n Tried to make a move \n \n");
         var lastGameState = _gameRepo.GetGameLastState(id);
         string serializedState;
 

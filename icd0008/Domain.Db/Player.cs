@@ -13,7 +13,5 @@ public class Player
     
     public ICollection<CheckersGame>? GamesAsPlayedP1 { get; set; }
     public ICollection<CheckersGame>? GamesAsPlayedP2 { get; set; }
-
-    // [InverseProperty("Player2")]
-    // public ICollection<CheckersGame>? GamesAsPlayer2 { get; set; }
+    
 }

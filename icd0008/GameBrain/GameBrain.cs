@@ -80,11 +80,10 @@ public class GameBrain
 
     public List<List<int>> GetPossibleMoves(int x, int y)
     {
-        // Console.WriteLine("\n \n ====== Got to brains Congratulations! ====== \n \n");
-        
-        
         List<List<int>> retList = new();
+        List<List<int>> movesWithTakeAPiece = new();
         List<List<int>> initialPossibleMoves = GetInitialPotentialMoves(x, y);
+        var foundMoveTakingAPiece = false;
 
         // Check if the player picked a piece according to their turn and color.
         if (_backEndState.CurrentMoveByWhite && FindPieceAt(x, y)!.Color == EPieceColor.Black) return retList;
@@ -99,11 +98,10 @@ public class GameBrain
                 if (piece.XCoordinate == move[0] && piece.YCoordinate == move[1])
                 {
                     // Piece was found diagonally, now it checks, whether it it 2 pieces in a row
-                    // e.g piece = 1:1; it checks if there is a piece on 2:2
+                    // e.g piece = 1:1; it checks if there is a piece on 2:2 
                     pieceFound = true;
                     List<int> tileInAValidDirection = GetTileInAValidDirection(x, move[0], y, move[1]);
                     var pieceOnFoundTile = FindPieceAt(tileInAValidDirection[0], tileInAValidDirection[1]);
-                    
                     // If piece found, define the colors and decide whether the move is possible
                     // (Return a list with a single element if mandatory take is on)
                     if (pieceOnFoundTile == null)
@@ -115,11 +113,8 @@ public class GameBrain
                             // Check if the move is within the board limits
                             if (NotMoveOutsideOfBorders(tileInAValidDirection))
                             {
-                                if (_options.MandatoryTake)
-                                {
-                                    List<List<int>> newRetList = new() { tileInAValidDirection };
-                                    return newRetList;
-                                }
+                                foundMoveTakingAPiece = true;
+                                movesWithTakeAPiece.Add(tileInAValidDirection);
                                 retList.Add(tileInAValidDirection);
                             }
                         }
@@ -129,7 +124,17 @@ public class GameBrain
             // For loop ended, check if any piece was found.
             if (!pieceFound && MoveCanBeMadeForThisPiece(x, y, move)) retList.Add(move);
         }
-        
+        // if multiple pieces can be taken, give user opportunity to decide which piece to take
+        if (_options.MandatoryTake && foundMoveTakingAPiece)
+        {
+            List<List<int>> temp = new();
+            foreach (var finalMove in movesWithTakeAPiece)
+            {
+                temp.Add(finalMove);
+            }
+            return temp;
+        }
+
         return retList;
     }
     
@@ -142,7 +147,6 @@ public class GameBrain
             if (selected.Color == EPieceColor.Black && move[1] < y) return false;
             return true;
         }
-        // TODO Not implemented for OP Queens, simply returns true
         return true;
     }
 
@@ -160,45 +164,103 @@ public class GameBrain
         var xDirection = xToward - xSelected;
         var yDirection = yToward - ySelected;
         
-        if (xDirection > 0) retList.Add(xSelected + 2);
-        else retList.Add(xSelected - 2);
+        if (xDirection > 0) retList.Add(xToward + 1);
+        else retList.Add(xToward - 1);
         
-        if (yDirection > 0) retList.Add(ySelected + 2);
-        else retList.Add(ySelected - 2);
+        if (yDirection > 0) retList.Add(yToward + 1);
+        else retList.Add(yToward - 1);
 
         return retList;
     }
 
     private List<List<int>> GetInitialPotentialMoves(int x, int y)
     {
-        // TODO you can elaborate the queens later, stick with simple queens for now.
-        // To receive OP queen move you probably need to write an algorithm
-        // that finds all diagonal moves up until the border. Or handle it separately...
-
+        if (_options.QueensHaveOpMoves && FindPieceAt(x, y)!.IsQueen) 
+            return GetInitialPotentialMovesForOpQueen(x, y);
         List<List<int>> retList = new();
         int bottomLimit = _options.BoardHeight;
         int rightLimit = _options.BoardWidth;
         if (x + 1 != rightLimit)
         {
-            if (y + 1 != bottomLimit)
-            {
-                retList.Add(new List<int>{x+1, y+1});
-            }
-            if (!(y - 1 < 0))
-            {
-                retList.Add(new List<int>{x+1, y-1});
-            }
+            if (y + 1 != bottomLimit) retList.Add(new List<int>{x+1, y+1});
+            
+            if (!(y - 1 < 0)) retList.Add(new List<int>{x+1, y-1});
+            
         }
         if (!(x - 1 < 0))
         {
-            if (y + 1 != bottomLimit)
+            if (y + 1 != bottomLimit) retList.Add(new List<int>{x-1, y+1});
+            
+            if (!(y - 1 < 0)) retList.Add(new List<int>{x-1, y-1});
+        }
+
+        return retList;
+    }
+
+    private List<List<int>> GetInitialPotentialMovesForOpQueen(int selectedX, int selectedY)
+    {
+        List<List<int>> retList = new();
+
+        int bottomLimit = _options.BoardHeight;
+        int rightLimit = _options.BoardWidth;
+        short counter = 1;
+        while (true)
+        {
+            int newXCoordinate = selectedX + counter;
+            int newYCoordinate = selectedY + counter;
+            if (FindPieceAt(newXCoordinate, newYCoordinate) != null)
             {
-                retList.Add(new List<int>{x-1, y+1});
+                retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+                break;
             }
-            if (!(y - 1 < 0))
+            if (newXCoordinate == rightLimit || newYCoordinate == bottomLimit) break;
+            retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+            counter++;
+        }
+
+        counter = 1;
+        while (true)
+        {
+            int newXCoordinate = selectedX + counter;
+            int newYCoordinate = selectedY - counter;
+            if (FindPieceAt(newXCoordinate, newYCoordinate) != null)
             {
-                retList.Add(new List<int>{x-1, y-1});
+                retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+                break;
             }
+            if (newXCoordinate == rightLimit || newYCoordinate == -1) break;
+            retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+            counter++;
+        }
+
+        counter = 1;
+        while (true)
+        {
+            int newXCoordinate = selectedX - counter;
+            int newYCoordinate = selectedY - counter;
+            if (FindPieceAt(newXCoordinate, newYCoordinate) != null)
+            {
+                retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+                break;
+            }
+            if (newXCoordinate == -1 || newYCoordinate == -1) break;
+            retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+            counter++;
+        }
+
+        counter = 1;
+        while (true)
+        {
+            int newXCoordinate = selectedX - counter;
+            int newYCoordinate = selectedY + counter;
+            if (FindPieceAt(newXCoordinate, newYCoordinate) != null)
+            {
+                retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+                break;
+            }
+            if (newXCoordinate == -1 || newYCoordinate == bottomLimit) break;
+            retList.Add(new List<int>{newXCoordinate, newYCoordinate});
+            counter++;
         }
 
         return retList;
@@ -216,14 +278,37 @@ public class GameBrain
         CheckersPiece selected = FindPieceAt(xFrom, yFrom)!;
         selected.XCoordinate = (short) xTo;
         selected.YCoordinate = (short) yTo;
-
-        // TODO decide whether the turn is over and remove the necessary piece.
+        
         var pieceTaken = false;
-        if (GetDiagonalDistanceOfTheMove(xFrom, yFrom, xTo, yTo) > 2)
+        CheckersPiece? pieceToRemove = null;
+        
+        if (selected.IsQueen && _options.QueensHaveOpMoves)
         {
-            int xToRemove = (xFrom + xTo) / 2;
-            int yToRemove = (yFrom + yTo) / 2;
-            _backEndState.GameBoard.Remove(FindPieceAt(xToRemove, yToRemove)!);
+            pieceToRemove = GetPieceToRemoveForOpQueen(xFrom, yFrom, xTo, yTo);
+        }
+        else
+        {
+            if (GetDiagonalDistanceOfTheMove(xFrom, yFrom, xTo, yTo) > 2)
+            {
+                int xToRemove = (xFrom + xTo) / 2;
+                int yToRemove = (yFrom + yTo) / 2;
+                pieceToRemove = FindPieceAt(xToRemove, yToRemove)!;
+            }
+        }
+
+        if (pieceToRemove != null)
+        {
+            switch (pieceToRemove.Color)
+            {
+                case EPieceColor.White:
+                    _backEndState.WhitesLeft--;
+                    break;
+                case EPieceColor.Black:
+                    _backEndState.BlacksLeft--;
+                    break;
+            }
+            
+            _backEndState.GameBoard.Remove(pieceToRemove);
             pieceTaken = true;
         }
 
@@ -235,11 +320,52 @@ public class GameBrain
                 _options.BoardHeight, _options.BoardWidth);
     }
 
+    private CheckersPiece? GetPieceToRemoveForOpQueen(int xFrom, int yFrom, int xTo, int yTo)
+    {
+        var xDirection = xTo - xFrom;
+        var yDirection = yTo - yFrom;
+        int xRemoveCoordinate;
+        int yRemoveCoordinate;
+        
+        if (xDirection > 0)
+        {
+            xRemoveCoordinate = xTo - 1;
+            if (yDirection > 0) yRemoveCoordinate = yTo - 1;
+            else yRemoveCoordinate = yTo + 1;
+        }
+        else
+        {
+            xRemoveCoordinate = xTo + 1;
+            if (yDirection > 0) yRemoveCoordinate = yTo - 1;
+            else yRemoveCoordinate = yTo + 1;
+        }
+
+        var retPiece = FindPieceAt(xRemoveCoordinate, yRemoveCoordinate);
+        return retPiece ?? null;
+    }
+
     private bool MorePiecesCanBeTaken(CheckersPiece movedPiece, bool pieceTaken)
     {
-        // TODO Check if more pieces can be taken
         if (!pieceTaken) return false;
+        
         var possibleMoves = GetPossibleMoves(movedPiece.XCoordinate, movedPiece.YCoordinate);
+        if (movedPiece.IsQueen && _options.QueensHaveOpMoves)
+        {
+            List<int> rightUpMove = new() { movedPiece.XCoordinate + 1, movedPiece.YCoordinate - 1 };
+            List<int> rightDownMove = new() { movedPiece.XCoordinate + 1, movedPiece.YCoordinate + 1 };
+            List<int> leftDownMove = new() { movedPiece.XCoordinate - 1, movedPiece.YCoordinate + 1 };
+            List<int> leftUpMove = new() { movedPiece.XCoordinate - 1, movedPiece.YCoordinate - 1 };
+            foreach (var move in possibleMoves)
+            {
+                if ( (move[0] == rightUpMove[0] && move[1] == rightUpMove[1])
+                    || (move[0] == rightDownMove[0] && move[1] == rightDownMove[1])
+                    || (move[0] == leftDownMove[0] && move[1] == leftDownMove[1])
+                    || (move[0] == leftUpMove[0] && move[1] == leftUpMove[1])) 
+                    return false;
+            }
+            return true;
+        }
+        
         foreach (var move in possibleMoves)
         {
             if (GetDiagonalDistanceOfTheMove(movedPiece.XCoordinate, movedPiece.YCoordinate,
