@@ -19,22 +19,19 @@ public class CreateModel : PageModel
         return Page();
     }
 
-    [BindProperty]
-    public Player Player { get; set; }
+    [BindProperty] public Player Player { get; set; } = default!;
     
-
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
       if (!ModelState.IsValid)
-        {
-            return Page();
-        }
+      {
+          return Page();
+      }
 
-        _context.Players.Add(Player);
-        await _context.SaveChangesAsync();
+      _context.Players.Add(Player);
+      await _context.SaveChangesAsync();
 
-        return RedirectToPage("./Index");
+      return RedirectToPage("./Index");
     }
 }
 

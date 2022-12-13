@@ -4,22 +4,18 @@ public class CheckersOptions
 {
     
     public int Id { get; set; }
-    
     public string Name { get; set; } = default!;
-
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public bool WhitesFirst { get; set; }
-
     public bool MandatoryTake { get; set; }
-
     public bool QueensHaveOpMoves { get; set; }
-
     public short BoardWidth { get; set; }
-
     public short BoardHeight { get; set; }
     
     public ICollection<CheckersGame>? OthelloGames { get; set; }
-    
+
+    // public CheckersOptions() { }
+
     public override string ToString() => 
         $"Whites First -> {WhitesFirst}\n" +
         $"Mandatory Take -> {MandatoryTake}\n" +

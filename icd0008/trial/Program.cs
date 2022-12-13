@@ -2,7 +2,6 @@
 
 using trial;
 
-Console.WriteLine("Hello, World!");
 
 HelloWorld hw = new HelloWorld();
 hw.Main();

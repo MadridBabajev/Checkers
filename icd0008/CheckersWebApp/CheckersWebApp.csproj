@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AiMoveHandler\AiMoveHandler.csproj" />
       <ProjectReference Include="..\DAL.Db\DAL.Db.csproj" />
       <ProjectReference Include="..\GameBrain\GameBrain.csproj" />
     </ItemGroup>

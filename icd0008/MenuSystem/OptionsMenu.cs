@@ -1,6 +1,7 @@
 
 using System.Text.Json;
 using GameOptions;
+using MenuSystem.ConsoleHelpers;
 
 namespace MenuSystem;
 

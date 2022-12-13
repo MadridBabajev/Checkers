@@ -14,7 +14,7 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-  public Domain.Db.CheckersOptions CheckersOptions { get; set; }
+    public Domain.Db.CheckersOptions CheckersOptions { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {

@@ -15,9 +15,9 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-  public Player Player { get; set; }
+  public Player Player { get; set; } = default!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+  public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null)
         {
@@ -36,22 +36,10 @@ public class DetailsModel : PageModel
 
     public List<CheckersGame> GetGamesByDate()
     {
-        // TODO Does not display games..
-        // List<CheckersGame> gamesAsP1 = new();
-        // List<CheckersGame> gamesAsP2 = new();
-        // if (Player.GamesAsPlayedP1 != null)
-        //     gamesAsP1 = Player.GamesAsPlayedP1.ToList();
-        // if (Player.GamesAsPlayedP2 != null) 
-        //     gamesAsP2 = Player.GamesAsPlayedP2.ToList();
-
-        // List<CheckersGame> combinedSorted = gamesAsP1.Concat(gamesAsP2).ToList();
-        // combinedSorted.Sort((g1, g2) => g1.StartedAt.CompareTo(g2.StartedAt));
-        
         var games = _context.CheckersGames.Where(g => g.GamePlayer1Id == Player.Id
                                                       || g.GamePlayer2Id == Player.Id).ToList();
         
         games.Sort((g1, g2) => g1.StartedAt.CompareTo(g2.StartedAt));
-        Console.WriteLine("FOUND GAMES = " + games.Count);
         return games;
     }
     

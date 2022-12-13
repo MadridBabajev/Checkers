@@ -4,17 +4,11 @@ namespace trial;
 
     public class HelloWorld
 {
-    private const byte SomeConst = 1;
     public void Main()
     {
         // some basic actions
-        float flt = 1.1f;
-        double rounded = Math.Round(flt); // Comment here
-        char chr = (char) rounded;
-        // int.Parse(someStr)
-        // Convert.ToInt32(someStr)
-        Console.WriteLine("Hi From hw class, chr: " + chr);
-        Console.WriteLine(SomeConst);
+
+        
         bool boolean = true;
         ArrayList nums = new ArrayList();
         if (boolean && nums.Count == 0)

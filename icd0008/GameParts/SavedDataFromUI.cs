@@ -1,15 +1,15 @@
 namespace GameParts;
 
-public class SavedDataFromUI
+public class SavedDataFromUi
 {
-    public SavedDataFromUI(List<CheckersPiece> checkersPieces, List<string> widthSpecifiers, List<string> heightCpecifiers)
+    public SavedDataFromUi(List<CheckersPiece> checkersPieces, List<string?> widthSpecifiers, List<string?> heightSpecifiers)
     {
         CheckersPieces = checkersPieces;
         WidthSpecifiers = widthSpecifiers;
-        HeightCpecifiers = heightCpecifiers;
+        HeightSpecifiers = heightSpecifiers;
     }
 
     public List<CheckersPiece> CheckersPieces { get; }
     public List<string?> WidthSpecifiers { get; }
-    public List<string?> HeightCpecifiers { get; }
+    public List<string?> HeightSpecifiers { get; }
 }

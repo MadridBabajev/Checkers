@@ -10,11 +10,10 @@ public static class WebUIBoardHandler
                                             short height,
                                             short width)
     {
-
-        // TODO you will probably have to calculate those based on the window size in a separate method
+        
         // with the width of 8 and laptop screen size .55 rem/tile seems to fit perfectly 
         var sizeCoefficient = width * 0.55;
-        // var rowCoefficient = height * 0.55;
+        
         var firstCycle = true;
         var lastWasWhiteTile = true;
 

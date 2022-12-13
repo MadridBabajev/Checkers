@@ -10,7 +10,7 @@ public static class GameUI
 {
     private static readonly List<CheckersPiece> CheckersPieces = new();
     // private static bool _spacesAfterNum;
-    public static SavedDataFromUI BuildInitialBoard(Options? options)
+    public static SavedDataFromUi BuildInitialBoard(Options? options)
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         List<string> widthSpecifiers = DrawUpperRow(options?.BoardWidth, options?.BoardHeight);
@@ -40,7 +40,7 @@ public static class GameUI
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("\n");
-        return new SavedDataFromUI(CheckersPieces, widthSpecifiers, heightSpecifiers);
+        return new SavedDataFromUi(CheckersPieces, widthSpecifiers!, heightSpecifiers!);
     }
 
     private static void WriteVerticalNum(Options options, short i)

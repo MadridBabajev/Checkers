@@ -30,11 +30,8 @@ public class CreateModel : PageModel
         return Page();
     }
 
-    [BindProperty]
-    public Domain.Db.CheckersOptions CheckersOptions { get; set; }
+    [BindProperty] public Domain.Db.CheckersOptions CheckersOptions { get; set; } = default!;
     
-
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
     public async Task<IActionResult> OnPostAsync()
     {
       if (!ModelState.IsValid)

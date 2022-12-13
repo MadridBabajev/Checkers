@@ -16,14 +16,13 @@ public class GamePlayerVsPlayer: IGame
     private List<string?>? _widthSpecifiers;
     private List<CheckersPiece>? _checkersPieces;
     private bool _whitesTurn;
-    private CheckersPiece? _currentlyChosenPiece;
     private bool GameOver { get; set; }
 
     private void GamePlayerVsPlayerFactoryNewGameStarted()
     {
         _gamesOptions = GetOptions();
         var savedDataFromUi = GameUI.GameUI.BuildInitialBoard(_gamesOptions);
-        _heightSpecifiers = savedDataFromUi.HeightCpecifiers;
+        _heightSpecifiers = savedDataFromUi.HeightSpecifiers;
         _widthSpecifiers = savedDataFromUi.WidthSpecifiers;
         _checkersPieces = savedDataFromUi.CheckersPieces;
         _whitesTurn = _gamesOptions?.WhitesFirst ?? true;
@@ -96,7 +95,7 @@ public class GamePlayerVsPlayer: IGame
             if (availableMovesForACertainPiece.Any(
                     move => move.SequenceEqual(userMove)))
             {
-                UpdateCurrentPieceCoordinates(movesThePieceTo);
+                UpdateCurrentPieceCoordinates();
                 return true;
             }
         }
@@ -116,7 +115,7 @@ public class GamePlayerVsPlayer: IGame
             return null;
         }
     }
-    private void UpdateCurrentPieceCoordinates(string? movesThePieceTo)
+    private void UpdateCurrentPieceCoordinates()
     {
         // TODO Updates selected piece's coordinates 
         throw new NotImplementedException();
@@ -156,7 +155,7 @@ public class GamePlayerVsPlayer: IGame
             return false;
         }
         
-        _currentlyChosenPiece = FindChosenPiece(heightSpecifier, widthSpecifier);
+        FindChosenPiece();
         return true;
     }
     private List<List<string?>> GetValidPiecesList(bool whitesTurn)
@@ -191,13 +190,10 @@ public class GamePlayerVsPlayer: IGame
         };
         return retList;
     }
-    private CheckersPiece FindChosenPiece(string? heightSpecifier, string? widthSpecifier)
+    private void FindChosenPiece()
     {
-        var yCoordinate = (short?)_heightSpecifiers?.IndexOf(heightSpecifier);
-        var xCoordinate = (short?)_widthSpecifiers?.IndexOf(widthSpecifier);
-        
-        return _checkersPieces?.Find(piece => piece.YCoordinate == yCoordinate 
-                                             && piece.XCoordinate == xCoordinate)!;
+        // var yCoordinate = (short?)_heightSpecifiers?.IndexOf(heightSpecifier);
+        // var xCoordinate = (short?)_widthSpecifiers?.IndexOf(widthSpecifier);
     }
 
     private void ProceedToSaveGame()

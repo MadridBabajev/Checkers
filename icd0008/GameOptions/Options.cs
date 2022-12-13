@@ -2,6 +2,15 @@ namespace GameOptions;
 
 public class Options
 {
+    public Options(bool whitesFirst, bool mandatoryTake, bool queensHaveOpMoves, short boardWidth, short boardHeight)
+    {
+        WhitesFirst = whitesFirst;
+        MandatoryTake = mandatoryTake;
+        QueensHaveOpMoves = queensHaveOpMoves;
+        BoardWidth = boardWidth;
+        BoardHeight = boardHeight;
+    }
+
     public bool WhitesFirst { get; set; }
 
     public bool MandatoryTake { get; set; }
@@ -35,6 +44,16 @@ public class Options
                && QueensHaveOpMoves == ((Options)obj).QueensHaveOpMoves
                && BoardWidth == ((Options)obj).BoardWidth
                && BoardHeight == ((Options)obj).BoardHeight;
+    }
+
+    protected bool Equals(Options other)
+    {
+        return WhitesFirst == other.WhitesFirst && MandatoryTake == other.MandatoryTake && QueensHaveOpMoves == other.QueensHaveOpMoves && BoardWidth == other.BoardWidth && BoardHeight == other.BoardHeight;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(WhitesFirst, MandatoryTake, QueensHaveOpMoves, BoardWidth, BoardHeight);
     }
 
     // public override int GetHashCode()

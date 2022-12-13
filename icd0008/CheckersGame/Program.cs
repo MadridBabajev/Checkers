@@ -8,7 +8,7 @@ namespace CheckersGame;
 
 internal static class CheckersGame
 {
-    private static readonly Options DefaultOptions = new();
+    private static readonly Options DefaultOptions = new(true, true, false, 8, 8);
     // Absolute path on my machine, the relative path doesn't seem to work for me..
     private const string OptionsPath = GlobalConstants.GlobalConstants.OptionsFileLocation;
 
@@ -22,12 +22,6 @@ internal static class CheckersGame
 
     private static void SetDefaultGameSetting()
     {
-        DefaultOptions.WhitesFirst = true;
-        DefaultOptions.MandatoryTake = true;
-        DefaultOptions.QueensHaveOpMoves = false;
-        DefaultOptions.BoardWidth = 8;
-        DefaultOptions.BoardHeight = 8;
-
         var jsonOptionsString = JsonSerializer.Serialize(DefaultOptions);
         File.WriteAllText(OptionsPath, jsonOptionsString);
     }

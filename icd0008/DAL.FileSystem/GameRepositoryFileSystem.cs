@@ -40,7 +40,6 @@ public class GameRepositoryFileSystem : IGameRepository
             var jsonString = JsonSerializer.Serialize(LastSavedGame);
             
             File.WriteAllText(GetFileName(id), jsonString);
-            Console.WriteLine("Game saved!\n");
         }
     }
     

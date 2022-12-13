@@ -1,9 +1,10 @@
-
 using DAL;
 using DAL.Db;
 using Domain.Db;
+using GameBrain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Exception = System.Exception;
 
 namespace CheckersWebApp.Pages.CheckersGames;
 
@@ -12,24 +13,25 @@ public class Play : PageModel
     
     private IGameRepository _gameRepo;
     [BindProperty]
-    public CheckersGame CheckersGame { get; set; }
+    public CheckersGame CheckersGame { get; set; } = null!;
+
     [BindProperty]
-    public Domain.Db.CheckersOptions Options { get; set; }
+    public Domain.Db.CheckersOptions Options { get; set; } = default!;
 
     [BindProperty] public global::GameBrain.GameBrain GameBrain { get; set; } = default!;
 
-    [BindProperty] public string RenderedFrontEndBoard { get; set; }
+    [BindProperty] public string RenderedFrontEndBoard { get; set; } = default!;
 
     public Play(ApplicationDbContext ctx)
     {
         _gameRepo = new GameRepository(ctx);
     }
 
-    private void PlayFactory(int id)
+    private void PlayFactory(int id, bool playerSurrenderRequest = false)
     {
-        // TODO make persistent objects, remember, html is stateless
-        // TODO and the objects initially created will be gone, find your way around it
-        // TODO Right now there is a lot of queries made after just 1 click
+        // make persistent objects, remember, html is stateless
+        // and the objects initially created will be gone, find your way around it
+        // Right now there is a lot of queries made after just 1 click
         CheckersGame = _gameRepo.GetGameById(id.ToString())!;
 
         Options = _gameRepo.GetOptionsById(CheckersGame.CheckersOptionsId);
@@ -39,7 +41,59 @@ public class Play : PageModel
         var gameState = _gameRepo.GetGameLastState(id)?.SerializedGameState;
         
         GameBrain = new GameBrain.GameBrain(Options, gameState);
+        while (CurrentMoveByAi() && !GameBrain.GameIsOver())
+        {
+            
+            Move? aiMove = 
+                AiMoveHandler.AiMoveHandler.GetAiMove(GameBrain).Result;
+            
+            if (aiMove == null)
+            {
+                FinishGame(id);
+                return;
+            }
+
+            OnGetMakeAMove(id, aiMove.XFrom,
+                aiMove.YFrom,
+                aiMove.XTo,
+                aiMove.YTo,
+                true);
+            // Delay does not render the board as it commits changes, so it just makes it worse
+            // Task.Delay(2 * 1000).Wait();
+        }
+        if (playerSurrenderRequest || GameBrain.GameIsOver()) FinishGame(id);
         RenderedFrontEndBoard = GameBrain.FrontEndState;
+    }
+
+    private bool CurrentMoveByAi()
+    {
+        if (GameBrain.GetCurrentGameState().CurrentMoveByWhite)
+        {
+            return CheckersGame.GamePlayer1!.PlayerType switch
+            {
+                EPlayerType.Human => false,
+                EPlayerType.Ai => true,
+                _ => false
+            };
+        }
+        return CheckersGame.GamePlayer2!.PlayerType switch
+        {
+            EPlayerType.Human => false,
+            EPlayerType.Ai => true,
+            _ => false
+        };
+    }
+
+    private void FinishGame(int id)
+    {
+        CheckersGame.GameWonByPlayer = GameBrain.GetCurrentGameState().CurrentMoveByWhite
+            ? CheckersGame.GamePlayer2
+            : CheckersGame.GamePlayer1;
+        
+        CheckersGame.GameOverAt = DateTime.Now;
+        CheckersGame temp = CheckersGame;
+        _gameRepo.DeleteGame(id.ToString());
+        _gameRepo.SaveGame(id.ToString(), temp);
     }
 
     public Task<IActionResult> OnGet(int id)
@@ -52,7 +106,6 @@ public class Play : PageModel
         {
             return Task.FromResult<IActionResult>(NotFound());
         }
-        
 
         return Task.FromResult<IActionResult>(Page());
     }
@@ -83,17 +136,10 @@ public class Play : PageModel
 
     public JsonResult OnGetPlayerSurrender(int id)
     {
-        Console.WriteLine("\n \n===== Player surrender =====\n \n");
-        PlayFactory(id);
-        CheckersGame.GameWonByPlayer = GameBrain.GetCurrentGameState().CurrentMoveByWhite
-            ? CheckersGame.GamePlayer2
-            : CheckersGame.GamePlayer1;
-        
-        CheckersGame.GameOverAt = DateTime.Now;
-        CheckersGame temp = CheckersGame;
-        _gameRepo.DeleteGame(id.ToString());
-        _gameRepo.SaveGame(id.ToString(), temp);
-        PlayFactory(id);
+        // also, check if the game is over on each get request
+        // e.g no more moves or no more pieces 
+        // PlayFactory(id);
+        PlayFactory(id, true);
         return new JsonResult("");
     }
 
@@ -115,18 +161,17 @@ public class Play : PageModel
         return new JsonResult(retList);
     }
 
-    public JsonResult OnGetMakeAMove(int id, int xFrom, int yFrom, int xTo, int yTo)
+    public JsonResult OnGetMakeAMove(int id, int xFrom, int yFrom, int xTo, int yTo, bool callFromFactory = false)
     {
-        try
-        {
-            PlayFactory(id);
+        if (!callFromFactory) {
+            try
+            {
+                PlayFactory(id);
+            }
+            catch (Exception) { // ignored
+            }
         }
-        catch (Exception)
-        {
-            Console.WriteLine("Failed");
-        }
-
-        Console.WriteLine("\n \n Tried to make a move \n \n");
+        
         var lastGameState = _gameRepo.GetGameLastState(id);
         string serializedState;
 

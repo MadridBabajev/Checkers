@@ -7,5 +7,10 @@ public class CurrentGameState
 
     public short WhitesLeft { get; set; }
     public short BlacksLeft { get; set; }
+
+    public short WhiteQueens { get; set; }
+
+    public short BlackQueens { get; set; }
+    
     public static void Main() {}
 }

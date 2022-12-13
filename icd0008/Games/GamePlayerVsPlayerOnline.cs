@@ -25,7 +25,7 @@ public class GamePlayerVsPlayerOnline: IGame
         throw new NotImplementedException();
     }
 
-    public Options? GetOptions()
+    public Options GetOptions()
     {
         throw new NotImplementedException();
     }

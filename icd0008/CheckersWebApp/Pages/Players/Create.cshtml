@@ -22,7 +22,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
-                            <label asp-for="Player.PlayerName" class="control-label mb-1"></label>
+                            <label asp-for="Player.PlayerName" class="control-label mb-1">Name</label>
                             <input asp-for="Player.PlayerName" class="form-control" />
                             <span asp-validation-for="Player.PlayerName" class="text-danger"></span>
                         </div>
@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <div class="form-group">
-                            <label asp-for="Player.PlayerType" class="control-label mb-1"></label>
+                            <label asp-for="Player.PlayerType" class="control-label mb-1">Type</label>
                             <select asp-for="Player.PlayerType" asp-items="Html.GetEnumSelectList<EPlayerType>()" class="form-control"></select>
                             <span asp-validation-for="Player.PlayerType" class="text-danger"></span>
                         </div>

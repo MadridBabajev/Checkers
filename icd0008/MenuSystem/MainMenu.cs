@@ -1,4 +1,6 @@
 
+using MenuSystem.ConsoleHelpers;
+
 namespace MenuSystem;
 
 public class MainMenu : IMenu

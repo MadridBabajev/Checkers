@@ -20,7 +20,6 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        // Probably exception is coming from here
         
         CheckersGames = await _context.CheckersGames
             .Include(c => c.CheckersOptions)

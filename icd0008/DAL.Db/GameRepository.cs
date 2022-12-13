@@ -78,7 +78,7 @@ public class GameRepository : IGameRepository
     public async void DeleteGame(string id)
     {
         var gameFromDb = GetGameById(id);
-        _dbContext.CheckersGames.Remove(gameFromDb!);
+        _dbContext.CheckersGames.Remove(gameFromDb);
         await _dbContext.SaveChangesAsync();
     }
 
