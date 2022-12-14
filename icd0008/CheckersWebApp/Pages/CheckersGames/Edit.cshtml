@@ -17,7 +17,7 @@
             </div>
             <form method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+                <input type="hidden" asp-for="CheckersGame.Id" />
                 <div class="card-body">
                     <div class="form-group">
                         <input type="hidden" asp-for="CheckersGame.Id" />
@@ -63,26 +63,25 @@
                         <label asp-for="CheckersGame.CheckersOptionsId" class="control-label">Options</label>
                         <select asp-for="CheckersGame.CheckersOptionsId" aria-label="Disabled select example" disabled class="form-control">
                             <option selected="selected">
-                                @Model.GetGameOptionsName();
+                                @Model.GetGameOptionsName()
                             </option>
                         </select>
-                        
                     </div>
                 </div>
-
+                
                 <div class="card-body">
                     <div class="form-group">
-                        <label asp-for="CheckersGame.GamePlayer1Id" class="control-label">Player 1</label>
-                        <select asp-for="CheckersGame.GamePlayer1Id" class="form-control" asp-items="ViewBag.GamePlayer1Id"></select>
-                        <span asp-validation-for="CheckersGame.GamePlayer1Id" class="text-danger"></span>
+                        <label asp-for="CheckersGame.GamePlayer1Id" class="control-label mb-1">Player 1</label>
+                        <select asp-for="CheckersGame.GamePlayer1Id" name="player1" class ="form-control" asp-items="ViewBag.GamePlayer1Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer1Id"></span>
                     </div>
                 </div>
                 
                 <div class="card-body">
                     <div class="form-group ">
-                        <label asp-for="CheckersGame.GamePlayer2Id" class="control-label">Player 2</label>
-                        <select asp-for="CheckersGame.GamePlayer2Id" class="form-control" asp-items="ViewBag.GamePlayer2Id"></select>
-                        <span asp-validation-for="CheckersGame.GamePlayer2Id" class="text-danger"></span>
+                        <label asp-for="CheckersGame.GamePlayer2Id" class="control-label mb-1"> Player 2</label>
+                        <select asp-for="CheckersGame.GamePlayer2Id" name="player2" class ="form-control" asp-items="ViewBag.GamePlayer2Id"></select>
+                        <span asp-validation-for="CheckersGame.GamePlayer2Id"></span>
                     </div>
                 </div>
 
@@ -103,3 +102,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

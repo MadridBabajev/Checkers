@@ -34,7 +34,7 @@ public class EditModel : PageModel
         return Page();
     }
     
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(int id, string playerName)
     {
         if (!ModelState.IsValid)
         {

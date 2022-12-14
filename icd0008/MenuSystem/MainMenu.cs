@@ -37,6 +37,6 @@ public class MainMenu : IMenu
             }
         }
     }
-    private static void Main() {}
+    
     
 }

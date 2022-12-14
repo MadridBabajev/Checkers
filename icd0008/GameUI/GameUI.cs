@@ -154,5 +154,5 @@ public static class GameUI
         else Console.Write("   ");
     }
 
-    private static void Main() {}
+    
 }

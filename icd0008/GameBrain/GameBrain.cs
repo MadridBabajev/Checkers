@@ -27,7 +27,7 @@ public class GameBrain
         {
             BackEndState = System.Text.Json.JsonSerializer.Deserialize<CurrentGameState>(lastState)!;
             FrontEndState = WebUIBoardHandler.CreateFrontEndBoard(BackEndState.GameBoard,
-                Options.BoardHeight, Options.BoardWidth);
+                Options.BoardHeight, Options.BoardWidth, Options);
         }
     }
 
@@ -76,7 +76,7 @@ public class GameBrain
         BackEndState.BlackQueens = 0;
         
         FrontEndState = WebUIBoardHandler.CreateFrontEndBoard(BackEndState.GameBoard,
-            Options.BoardHeight, Options.BoardWidth);
+            Options.BoardHeight, Options.BoardWidth, Options);
         
     }
 
@@ -343,7 +343,7 @@ public class GameBrain
         if (!calledFromAiHandler) {
             FrontEndState =
                 WebUIBoardHandler.CreateFrontEndBoard(BackEndState.GameBoard,
-                    Options.BoardHeight, Options.BoardWidth);
+                    Options.BoardHeight, Options.BoardWidth, Options);
         }
     }
 

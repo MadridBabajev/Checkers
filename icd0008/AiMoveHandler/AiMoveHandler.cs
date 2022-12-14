@@ -4,7 +4,7 @@ namespace AiMoveHandler;
 using GameBrain;
 public static class AiMoveHandler
 {
-    private const int Delay = 2;
+    // private const int Delay = 2;
     private const int MaxDepth = 5;
     private const double QueenEvaluation = 0.75;
     

@@ -68,5 +68,4 @@ public class GameRepositoryFileSystem : IGameRepository
         LastSavedGame.SavedDate = savedDate.ToString(CultureInfo.CurrentCulture);
     }
     
-    private static void Main() {}
 }

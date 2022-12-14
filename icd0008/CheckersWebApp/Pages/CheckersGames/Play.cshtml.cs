@@ -136,9 +136,6 @@ public class Play : PageModel
 
     public JsonResult OnGetPlayerSurrender(int id)
     {
-        // also, check if the game is over on each get request
-        // e.g no more moves or no more pieces 
-        // PlayFactory(id);
         PlayFactory(id, true);
         return new JsonResult("");
     }

@@ -60,6 +60,5 @@ public class Options
     // {
     //     return base.GetHashCode();
     // }
-
-    private static void Main() {}
+    
 }

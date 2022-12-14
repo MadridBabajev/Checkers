@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,15 +26,15 @@ public class EditModel : PageModel
         }
 
         var checkersGame =  await _context.CheckersGames.FirstOrDefaultAsync(m => m.Id == id);
-        if (checkersGame == null)
-        {
-            return NotFound();
-        }
-        CheckersGame = checkersGame;
         
+        if (checkersGame == null) return NotFound();
+        
+        CheckersGame = checkersGame;
+
         var lastState = _context.GameStates.Where(gs => gs.CheckersGameId == id)
             .OrderByDescending(gs => gs.CreatedAt)
             .FirstOrDefault();
+        
         if (lastState == null)
         {
             ViewData["WhitesLeft"] = "default";
@@ -48,31 +47,37 @@ public class EditModel : PageModel
             ViewData["WhitesLeft"] = deserializedState.WhitesLeft;
             ViewData["BlacksLeft"] = deserializedState.BlacksLeft;
         }
-
+        
         ViewData["GamePlayer1Id"] = new SelectList(_context.Players, "Id", "PlayerName");
         ViewData["GamePlayer2Id"] = new SelectList(_context.Players, "Id", "PlayerName");
+        
         return Page();
     }
     
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(int id,
+        int player1, int player2)
     {
         if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        _context.Attach(CheckersGame).State = EntityState.Modified;
-
+        GameRepository repo = new GameRepository(_context);
+        CheckersGame = repo.GetGameById(id.ToString());
+        
+        CheckersGame.GamePlayer1Id = player1;
+        CheckersGame.GamePlayer2Id = player2;
         try
         {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException e)
         {
             if (!CheckersGameExists(CheckersGame.Id))
             {
                 return NotFound();
             }
+            Console.WriteLine(e);
         }
 
         return RedirectToPage("./Index");

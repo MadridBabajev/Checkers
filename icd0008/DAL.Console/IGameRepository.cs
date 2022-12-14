@@ -18,5 +18,5 @@ public interface IGameRepository
     // Delete
     public static void DeleteGame(string id){}
     
-    private static void Main() {}
+    
 }

@@ -28,6 +28,15 @@ public class ApplicationDbContext: DbContext
         modelBuilder.Entity<Player>().HasIndex(p => p.PlayerName)
             .IsUnique();
         
+        modelBuilder.Entity<Player>()
+            .HasMany(p => p.GamesAsPlayedP1)
+            .WithOne(g => g.GamePlayer1)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Player>()
+            .HasMany(p => p.GamesAsPlayedP2)
+            .WithOne(g => g.GamePlayer2)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
 }

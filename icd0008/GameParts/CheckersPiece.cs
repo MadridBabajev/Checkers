@@ -36,6 +36,5 @@ public class CheckersPiece
                $"X -> {XCoordinate}; " +
                $"isQueen -> {IsQueen}; ";
     }
-
-    private static void Main() {}
+    
 }

@@ -245,5 +245,5 @@ public class GamePlayerVsPlayer: IGame
         GameRepositoryFileSystem.SaveGame(
             id, _gamesOptions, EGameType.Pvp, _checkersPieces, _heightSpecifiers, _widthSpecifiers, _whitesTurn, DateTime.Now);
     }
-    private static void Main() {}
+    
 }

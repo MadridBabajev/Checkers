@@ -18,8 +18,5 @@ public class Game
     {
         return $"Game id -> {GameId}\n";
     }
-    private static void Main() {}
-}
-
-
     
+}

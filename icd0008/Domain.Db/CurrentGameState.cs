@@ -12,5 +12,4 @@ public class CurrentGameState
 
     public short BlackQueens { get; set; }
     
-    public static void Main() {}
 }
