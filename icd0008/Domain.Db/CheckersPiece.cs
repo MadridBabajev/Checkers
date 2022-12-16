@@ -12,15 +12,7 @@ public class CheckersPiece
         YCoordinate = y;
         Color = color;
     }
-    
-    public CheckersPiece(short x, short y, EPieceColor color, bool isQueen)
-    {
-        XCoordinate = x;
-        YCoordinate = y;
-        Color = color;
-        IsQueen = isQueen;
-    }
-    
+
     public CheckersPiece() {}
     public override string ToString()
     {

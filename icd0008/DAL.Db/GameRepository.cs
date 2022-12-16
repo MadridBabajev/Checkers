@@ -75,14 +75,6 @@ public class GameRepository : IGameRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async void UpdateGame(CheckersGame game)
-    {
-        // CheckersGame gameToUpdate = await _dbContext.CheckersGames.FirstAsync(g => g.Id == game.Id);
-        // DeleteGame(game.Id.ToString());
-        // SaveGame(game.Id.ToString(), game);
-        await _dbContext.SaveChangesAsync();
-    }
-
     public async void DeleteGame(string id)
     {
         var gameFromDb = GetGameById(id);

@@ -59,10 +59,10 @@ public static class AiMoveHandler
                      game.GetCurrentGameState().GameBoard, currentPlayerColor), game))
         {
             GameBrain gameCloned = DeepClone(game);
-            Move currentMove = gameCloned.MakeAiMove(move);
             Move potentialBestMove = MiniMax(
-                currentMove, depth + 1, !maxPlayer, root, gameCloned);
-            
+                move, depth + 1, !maxPlayer, root, gameCloned);
+            Move potentialBestMoveMade = gameCloned.MakeAiMove(potentialBestMove);
+
             double stateEvaluation = EvaluateBoardState(
                 gameCloned.GetCurrentGameState(), root);
             double newPossibleMiniMaxValue = maxPlayer
@@ -70,9 +70,9 @@ public static class AiMoveHandler
                 : Math.Min(miniMaxValue, stateEvaluation);
 
             if (maxPlayer)
-            { if (newPossibleMiniMaxValue >= miniMaxValue) bestMove = potentialBestMove; }
+            { if (newPossibleMiniMaxValue >= miniMaxValue) bestMove = potentialBestMoveMade; }
             else 
-            { if (newPossibleMiniMaxValue <= miniMaxValue) bestMove = potentialBestMove; }
+            { if (newPossibleMiniMaxValue <= miniMaxValue) bestMove = potentialBestMoveMade; }
         }
 
         return bestMove!;

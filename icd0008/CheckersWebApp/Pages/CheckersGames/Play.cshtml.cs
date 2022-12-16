@@ -50,7 +50,7 @@ public class Play : PageModel
             if (aiMove == null)
             {
                 FinishGame(id);
-                return;
+                break;
             }
 
             OnGetMakeAMove(id, aiMove.XFrom,
@@ -58,7 +58,7 @@ public class Play : PageModel
                 aiMove.XTo,
                 aiMove.YTo,
                 true);
-            // Delay does not render the board as it commits changes, so it just makes it worse
+            // Delay does not render the board as it commits changes, it just makes it worse
             // Task.Delay(2 * 1000).Wait();
         }
         if (playerSurrenderRequest || GameBrain.GameIsOver()) FinishGame(id);

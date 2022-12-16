@@ -22,8 +22,7 @@ public interface IGameRepository
 
     // create and update
     void SaveGame(string id, CheckersGame game);
-
-    void UpdateGame(CheckersGame game);
+    
     void AddState(string currentState, int id);
     
     // delete
